@@ -1,11 +1,17 @@
 import React, { PropsWithChildren } from 'react';
 import Header from '@/components/header';
 
-const PageLayout = ({children}: PropsWithChildren) => {
+type Props = PropsWithChildren<{
+    className?: string;
+}>
+
+const PageLayout = ({children, className}: Props) => {
     return (
-        <div className={"min-h-screen flex flex-col"}>
+        <div className={"h-screen flex flex-col bg-[url('assets/images/background.jpg')] bg-cover"}>
             <Header />
-            {children}
+            <main className={`flex-1 overflow-hidden ${className}`}>
+                {children}
+            </main>
         </div>
     );
 };

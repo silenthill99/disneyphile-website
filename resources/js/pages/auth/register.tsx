@@ -7,7 +7,6 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
     name: string;
@@ -32,9 +31,9 @@ export default function Register() {
     };
 
     return (
-        <AuthLayout title="Create an account" description="Enter your details below to create your account">
+        <div className={"min-h-screen bg-[url('disneyland-486098.jpg')] bg-cover bg-center bg-fixed flex items-center justify-center"}>
             <Head title="Register" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
+            <form className="flex flex-col gap-6 bg-white w-100 p-5 rounded-4xl" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
@@ -114,6 +113,6 @@ export default function Register() {
                     </TextLink>
                 </div>
             </form>
-        </AuthLayout>
+        </div>
     );
 }
