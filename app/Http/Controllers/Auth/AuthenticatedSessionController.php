@@ -39,8 +39,9 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('dashboard', absolute: false));
         }
 //        $request->authenticate();
+        \Log::debug('flash loginError will be set');
 
-        return redirect()->route('login')->with('loginError', 'Ces identifiants sont invalides');
+        return to_route('login')->with('loginError', 'Ces identifiants sont invalides');
     }
 
     /**

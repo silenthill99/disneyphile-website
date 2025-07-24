@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -52,7 +53,12 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
-                'loginError' => fn() => $request->session()->get('loginError'),
+                'loginError' => function() use($request) {
+                    Log::debug('loginError value in shared props', [
+                        'value' => $request->session()->get('loginError')
+                    ]);
+                    return $request->session()->get('loginError');
+                },
             ]
         ];
     }

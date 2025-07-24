@@ -36,7 +36,12 @@ const Header = () => {
     function handleLogin(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         postLoginData(route("login"), {
-            onError: () => window.location.href = route('login')
+            onSuccess: () => {
+
+            },
+            onError: () => {
+                window.location.href = route("login")
+            }
         })
     }
 

@@ -36,16 +36,16 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     const { flash } = usePage<SharedData>().props;
-    const loginError = flash?.loginError;
+    console.log("FLASH LOGIN ERROR : ", flash?.loginError)
 
     return (
         <div className={"bg-[url('/disneyland-486098.jpg')] min-h-screen bg-cover bg-center flex justify-center items-center"}>
             <Head title="Se connecter" />
 
             <div className={"w-100 bg-white p-5 rounded-4xl shadow"}>
-                {loginError && (
+                {flash?.loginError && (
                     <div className="mb-4 text-center text-sm font-semibold text-red-600">
-                        {loginError}
+                        {flash?.loginError}
                     </div>
                 )}
                 <form className="flex flex-col gap-6" onSubmit={submit}>
