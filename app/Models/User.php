@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Psy\Util\Str;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'role_id',
         'name',
+        'slug',
         'email',
         'password',
     ];
@@ -51,5 +53,15 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+    protected static function booted() {
+        static::creating(function ($model) {
+            $model->slug = Str::slug($model->name);
+        });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

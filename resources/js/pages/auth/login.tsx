@@ -35,7 +35,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     return (
-        <div className={"bg-[url('disneyland-486098.jpg')] min-h-screen bg-cover bg-center flex justify-center items-center"}>
+        <div className={"bg-[url('/disneyland-486098.jpg')] min-h-screen bg-cover bg-center flex justify-center items-center"}>
             <Head title="Se connecter" />
 
             <div className={"w-100 bg-white p-5 rounded-4xl shadow"}>

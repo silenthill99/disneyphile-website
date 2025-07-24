@@ -8,7 +8,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-montserrat: "Montserrat";
+    --font-montserrat: "Montserrat", sans-serif;
     --font-roboto: Roboto;
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -165,15 +165,29 @@
 }
 
 @font-face {
-    font-family: Montserrat, sans-serif;
-    src:
-        url(../fonts/Montserrat-Italic-VariableFont_wght.ttf),
-        url(../fonts/Montserrat-VariableFont_wght.ttf);
+    font-family: "Montserrat";
+    src: url(../fonts/Montserrat-VariableFont_wght.ttf) format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
 }
 
 @font-face {
-    font-family: Roboto, sans-serif;
-    src:
-        url(../fonts/Roboto-Italic-VariableFont_wdth,wght.ttf),
-        url(../fonts/Roboto-VariableFont_wdth,wght.ttf);
+    font-family: "Montserrat";
+    src: url(../fonts/Montserrat-Italic-VariableFont_wght.ttf) format("truetype");
+    font-weight: 100 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url(../fonts/Roboto-VariableFont_wdth,wght.ttf) format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url(../fonts/Roboto-Italic-VariableFont_wdth,wght.ttf) format("truetype");
+    font-style: italic;
+    font-weight: 100 900;
 }
