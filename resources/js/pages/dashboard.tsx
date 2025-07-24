@@ -1,13 +1,21 @@
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import PageLayout from '@/layouts/page-layout';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+];
 
 export default function Dashboard() {
     return (
-        <PageLayout className={"container mx-auto md:grid md:grid-cols-4 p-5 h-2000"}>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className={"bg-white rounded-2xl"}>
+            <div className={"bg-white h-full rounded-2xl"}>
 
             </div>
-        </PageLayout>
+        </AppLayout>
     );
 }

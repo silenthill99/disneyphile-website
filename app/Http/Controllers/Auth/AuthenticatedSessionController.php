@@ -29,11 +29,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $credentials = $request->validate([
+            "email" => "required|email",
+            "password" => "required",
+        ]);
 
-        $request->session()->regenerate();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+//        $request->authenticate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->route('login')->with('loginError', 'Ces identifiants sont invalides');
     }
 
     /**

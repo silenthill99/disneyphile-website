@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SharedData } from '@/types';
 
 type LoginForm = {
     email: string;
@@ -34,11 +35,19 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         });
     };
 
+    const { flash } = usePage<SharedData>().props;
+    const loginError = flash?.loginError;
+
     return (
         <div className={"bg-[url('/disneyland-486098.jpg')] min-h-screen bg-cover bg-center flex justify-center items-center"}>
             <Head title="Se connecter" />
 
             <div className={"w-100 bg-white p-5 rounded-4xl shadow"}>
+                {loginError && (
+                    <div className="mb-4 text-center text-sm font-semibold text-red-600">
+                        {loginError}
+                    </div>
+                )}
                 <form className="flex flex-col gap-6" onSubmit={submit}>
                     <div className="grid gap-6">
                         <div className="grid gap-2">

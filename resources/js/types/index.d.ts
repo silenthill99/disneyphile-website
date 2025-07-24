@@ -29,6 +29,9 @@ export interface SharedData {
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
     [key: string]: unknown;
+    flash?: {
+        loginError?: string;
+    }
 }
 
 export interface User {
