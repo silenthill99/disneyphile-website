@@ -21,7 +21,7 @@ export default function Welcome() {
             </div>
 
             {/* Centre (le seul scrollable) */}
-            <div className="col-span-2 bg-white rounded-2xl h-full overflow-y-auto p-4 opacity-75">
+            <div className="col-span-2 bg-white/75 rounded-2xl h-full overflow-y-auto p-4 ">
 
             </div>
 

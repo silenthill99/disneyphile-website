@@ -7,9 +7,9 @@ type Props = PropsWithChildren<{
 
 const PageLayout = ({children, className}: Props) => {
     return (
-        <div className={"h-screen flex flex-col bg-[url('/assets/images/background.jpg')] bg-cover"}>
+        <div className={"min-h-screen flex flex-col bg-[url('/assets/images/background.jpg')] bg-cover bg-fixed"}>
             <Header />
-            <main className={`flex-1 overflow-hidden ${className}`}>
+            <main className={`grow ${className}`}>
                 {children}
             </main>
         </div>

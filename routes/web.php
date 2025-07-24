@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,10 +18,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('welcome');
     })->name('search');
 
-    Route::get('/members', function () {
-        $users = User::all();
-        return Inertia::render('members/index', compact('users'));
-    })->name('members.index');
+    Route::get('/members', [UserController::class, "index"])->name('members.index');
+    Route::get("/members/{user}",[UserController::class, "show"])->name('members.show');
 });
 
 require __DIR__.'/settings.php';
