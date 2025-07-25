@@ -4,15 +4,23 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { SharedData, User } from '@/types';
 
 const Show = () => {
-    const {auth, user} = usePage<SharedData & {user: User}>().props;
+    const {auth, user, can} = usePage<SharedData & {user: User, can: {view: boolean}}>().props;
+
+    console.log("can.view =", can.view);
+    console.log("user.id =", user.id);
+    console.log("auth.user?.id =", auth.user?.id);
+
     return (
         <PageLayout className={"p-5 container mx-auto grid grid-cols-4 gap-5"}>
             <Head title={user.name}/>
             <div className={"bg-white flex flex-col items-center p-2 rounded-md"}>
                 <h2 className={"text-3xl"}>{user.name}</h2>
-                {auth.user?.id === user?.id && (
+                {can.view && (
                     <Link href={route("dashboard")}>Accéder à mon tableau de bord</Link>
                 )}
+            </div>
+            <div className={"bg-white/90 rounded-md md:col-span-3 backdrop-blur-md"}>
+
             </div>
         </PageLayout>
     );

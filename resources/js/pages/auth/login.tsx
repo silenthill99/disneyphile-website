@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { SharedData } from '@/types';
 
 type LoginForm = {
     email: string;
@@ -19,6 +18,12 @@ type LoginForm = {
 interface LoginProps {
     status?: string;
     canResetPassword: boolean;
+}
+
+type Flash = {
+    flash?: {
+        loginError?: string;
+    }
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
@@ -35,7 +40,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         });
     };
 
-    const { flash } = usePage<SharedData>().props;
+    const { flash } = usePage<Flash>().props;
     console.log("FLASH LOGIN ERROR : ", flash?.loginError)
 
     return (

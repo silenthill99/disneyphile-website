@@ -63,6 +63,9 @@ const Header = () => {
                                 <Link href={route('dashboard')}>Tableau de bord</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem className={"hover:underline"}>
+                                <Link href={route('members.show', auth.user.slug)}>Mon profil</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className={"hover:underline"}>
                                 <Link href={route('logout')} method={"post"} className={"cursor-pointer"}>Se déconnecter</Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -21,7 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/members', [UserController::class, "index"])->name('members.index');
 });
 
-Route::get("/members/{user}",[UserController::class, "show"])->name('members.show');
+Route::get("/members/{user}",[UserController::class, "show"])
+    ->name('members.show');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
