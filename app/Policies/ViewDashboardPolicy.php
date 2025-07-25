@@ -14,4 +14,9 @@ class ViewDashboardPolicy
         return $user->is($model);
     }
 
+    public function admin(User $user): bool
+    {
+        return $user->role->name === 'Admin';
+    }
+
 }

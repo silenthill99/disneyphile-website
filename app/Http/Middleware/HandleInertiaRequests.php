@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Gate;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,9 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user(),
+                'user' => fn() => $request->user()?->load("role")->setAttribute('can', [
+                    'admin' => Gate::allows('admin', $request->user()),
+                ]),
             ],
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),

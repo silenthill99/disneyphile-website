@@ -42,6 +42,9 @@ export interface User {
     updated_at: string;
     role?: Role
     [key: string]: unknown; // This allows for additional properties...
+    can?: {
+        admin?: boolean;
+    }
 }
 
 export interface Role {
