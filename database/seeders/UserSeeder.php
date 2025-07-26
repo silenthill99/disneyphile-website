@@ -14,7 +14,9 @@ class UserSeeder extends Seeder
         $name = 'Florian GRAZIANI';
         $roleId = Role::where('name', 'Admin')->firstOrFail()->id;
 
+        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
         DB::table('users')->truncate();
+        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
         DB::table('users')->insert([
             'role_id' => $roleId,
             'name' => $name,
