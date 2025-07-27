@@ -3,22 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class TagController extends Controller
 {
     public function index()
     {
-        return Tag::all();
+        $tags = Auth::user()->tags;
+        $users = User::with('tags')->get();
+        $tags_all = Tag::all();
+        return Inertia::render("tags", compact(["tags", "users", "tags_all"]));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-
+            "name" => "required",
         ]);
 
-        return Tag::create($data);
+        Tag::create($data);
+
+        return Redirect::route('tags.index')->with('success', 'Tag created.');
     }
 
     public function show(Tag $tag)
@@ -42,5 +51,10 @@ class TagController extends Controller
         $tag->delete();
 
         return response()->json();
+    }
+
+    public function attach(User $user, Tag $tag) {
+        $user->tags()->attach($tag);
+        return \redirect()->back();
     }
 }

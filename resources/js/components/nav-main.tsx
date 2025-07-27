@@ -24,9 +24,9 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                 ))}
                 {auth.user.can?.admin && (
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild isActive={"/test" === page.url} tooltip={{ children: "Essai"}}>
-                            <Link href={"/test"} prefetch>
-                                <span>Essai 123</span>
+                        <SidebarMenuButton asChild isActive={"/tags" === page.url} tooltip={{ children: "Essai"}}>
+                            <Link href={"/tags"} prefetch>
+                                <span>Tags</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

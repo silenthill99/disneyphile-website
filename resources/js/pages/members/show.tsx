@@ -28,7 +28,9 @@ const Show = () => {
                     <p>Aucun tags actuellement</p>
                 ) : (
                     tags.map(tag => (
-                        <Badge key={tag.id}>{tag.name}</Badge>
+                        <div className={"flex flex-gap"}>
+                            <Badge key={tag.id}>{tag.name}</Badge>
+                        </div>
                     ))
                 )}
             </div>

@@ -62,6 +62,9 @@ class HandleInertiaRequests extends Middleware
                     ]);
                     return $request->session()->get('loginError');
                 },
+                'success' => function() use($request) {
+                    return $request->session()->get('success');
+                }
             ]
         ];
     }
