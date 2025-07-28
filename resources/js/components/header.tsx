@@ -42,7 +42,7 @@ const Header = () => {
 
     return (
         <header className={'sticky top-0 min-h-5 bg-blue-400 shadow'}>
-            <div className={'container mx-auto my-2 flex items-center justify-between'}>
+            <div className={'container mx-auto py-2 flex items-center justify-between'}>
                 <Link href={route('home')}>
                     <AppLogoIcon className={'h-auto w-10 text-white'} />
                 </Link>
@@ -52,23 +52,30 @@ const Header = () => {
                 </form>
                 {auth.user ? (
                     <div className={"flex gap-2"}>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className={'rounded bg-white p-2'}>Menu</DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem asChild className={'hover:underline'}>
-                                    <Link href={route('dashboard')}>Tableau de bord</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className={'hover:underline'}>
-                                    <Link href={route('members.show', auth.user.slug)}>Mon profil</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className={'hover:underline'}>
-                                    <Link href={route('logout')} method={'post'} className={'cursor-pointer'}>
-                                        Se déconnecter
-                                    </Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                        <Mailbox className={"w-10 text-white "}/>
+                        <nav className={"hidden md:block text-white"}>
+                            <ul>
+                                <li><Link href={route("dashboard")} className={"underline decoration-transparent hover:decoration-white duration-200"}>Tableau de bord</Link></li>
+                            </ul>
+                        </nav>
+                        <div className={"md:hidden"}>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className={'rounded bg-white p-1'}>Menu</DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild className={'hover:underline'}>
+                                        <Link href={route('dashboard')}>Tableau de bord</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild className={'hover:underline'}>
+                                        <Link href={route('members.show', auth.user.slug)}>Mon profil</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild className={'hover:underline'}>
+                                        <Link href={route('logout')} method={'post'} className={'cursor-pointer'}>
+                                            Se déconnecter
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                        <Mailbox className={"w-5 text-white "}/>
                     </div>
                 ) : (
                     <form onSubmit={handleLogin} className={'space-x-2'}>

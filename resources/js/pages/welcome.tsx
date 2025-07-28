@@ -15,15 +15,15 @@ export default function Welcome() {
     })
     DOMPurify.sanitize(linkedText);
     return (
-        <PageLayout className="grid md:grid-cols-4 gap-5 h-full container mx-auto p-5">
+        <PageLayout className="grid md:grid-cols-5 gap-5 h-full container mx-auto py-5">
             <Head title="Welcome">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden md:flex bg-white rounded-2xl h-full p-5 md:flex-col items-center gap-5">
-                <img src="/assets/images/logo.svg" className={"w-30 h-30 rounded-full bg-gray-200"} alt="" />
-                <h2 className={"text-3xl"}>{auth.user.name}</h2>
+                <img src="/assets/images/logo.svg" className={"w-15 h-15 rounded-full bg-gray-200"} alt="" />
+                <h2 className={"text-2xl"}>{auth.user.name}</h2>
                 <nav>
                     <ul>
                         <li><Link href={route("members.index")} className={"hover:underline"}>Liste des membres</Link></li>
@@ -32,7 +32,7 @@ export default function Welcome() {
             </div>
 
             {/* Centre (le seul scrollable) */}
-            <div className="col-span-2 rounded-2xl h-full overflow-y-auto p-4 backdrop-blur-md bg-white/80">
+            <div className="col-span-3 rounded-2xl h-full overflow-y-auto p-4 backdrop-blur-md bg-white/80">
                 <div className={"bg-white min-h-50 rounded-2xl p-2"}>
                     <Textarea className={"resize-none"} placeholder={"Ajouter un nouveau post"}/>
                 </div>
