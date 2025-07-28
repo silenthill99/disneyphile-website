@@ -1,7 +1,7 @@
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { FormEvent, FormEventHandler } from 'react';
+import { FormEvent, FormEventHandler, useState } from 'react';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
@@ -42,6 +42,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
     const imageChange = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log('Contenu envoyé :', fileData.image);
         patchData(route('profile.update.image'), {
             forceFormData: true,
             onSuccess: () => resetFileData()
@@ -55,6 +56,8 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
             preserveScroll: true,
         });
     };
+
+    const [img, setImg] = useState<string | null>(null);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -137,10 +140,20 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                 </div>
                 <div>
                     <h3 className={"mb-0.5 text-base font-medium"}>Change image profile</h3>
-                    <form onSubmit={imageChange}>
-                        <Input type={"file"} accept={"image/*"} onChange={e => e.target.files?.[0] && setFileData('image', e.target.files[0])}/>
+                    <form onSubmit={imageChange} encType={"multipart/form-data"}>
+                        <Input type={"file"} name={"image"} accept={"image/*"}
+                               onChange={e => {
+                                   const file = e.target.files?.[0]
+                                   if (file) {
+                                       setFileData('image', file)
+                                       setImg(URL.createObjectURL(file))
+                                   }
+                               }}/>
                         <Button type={"submit"}>Mettre à jour</Button>
                         {errorFile.image}
+                        {img && (
+                            <img src={img} alt={"Preview"}/>
+                        )}
                     </form>
                 </div>
                 <DeleteUser />

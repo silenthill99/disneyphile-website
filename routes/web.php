@@ -37,5 +37,7 @@ Route::get("/landing", function () {
 Route::get("/members/{user}",[UserController::class, "show"])
     ->name('members.show');
 
+Route::view('/test-form', 'test');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
