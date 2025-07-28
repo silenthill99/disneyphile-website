@@ -1,7 +1,7 @@
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEvent, FormEventHandler } from 'react';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
@@ -24,6 +24,10 @@ type ProfileForm = {
     email: string;
 }
 
+type ImageForm = {
+    image: File | null;
+}
+
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
@@ -31,6 +35,18 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
         name: auth.user.name,
         email: auth.user.email,
     });
+
+    const {data: fileData, setData: setFileData, patch: patchData, reset: resetFileData, errors: errorFile} = useForm<Required<ImageForm>>({
+        image: null as File | null
+    })
+
+    const imageChange = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        patchData(route('profile.update.image'), {
+            forceFormData: true,
+            onSuccess: () => resetFileData()
+        })
+    }
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -119,7 +135,14 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         </div>
                     </form>
                 </div>
-
+                <div>
+                    <h3 className={"mb-0.5 text-base font-medium"}>Change image profile</h3>
+                    <form onSubmit={imageChange}>
+                        <Input type={"file"} accept={"image/*"} onChange={e => e.target.files?.[0] && setFileData('image', e.target.files[0])}/>
+                        <Button type={"submit"}>Mettre à jour</Button>
+                        {errorFile.image}
+                    </form>
+                </div>
                 <DeleteUser />
             </SettingsLayout>
         </AppLayout>

@@ -53,8 +53,13 @@ const Header = () => {
                 {auth.user ? (
                     <div className={"flex gap-2"}>
                         <nav className={"hidden md:block text-white"}>
-                            <ul>
-                                <li><Link href={route("dashboard")} className={"underline decoration-transparent hover:decoration-white duration-200"}>Tableau de bord</Link></li>
+                            <ul className={"flex gap-2"}>
+                                <li>
+                                    <Link href={route("dashboard")} className={"underline decoration-transparent hover:decoration-white duration-200"}>Tableau de bord</Link>
+                                </li>
+                                <li>
+                                    <Link href={route("members.show", auth.user.slug)} className={"underline decoration-transparent hover:decoration-white duration-200"}>Profil</Link>
+                                </li>
                             </ul>
                         </nav>
                         <div className={"md:hidden"}>

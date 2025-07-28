@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,6 +39,24 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return to_route('profile.edit');
+    }
+
+    public function update_image(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $data = $request->validate(['image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000']);
+
+        $user = $request->user();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('images', $imageName, 'public');
+            $data['image_profile'] = $path;
+        }
+
+        $user->update($data);
+
+        return Redirect::back();
     }
 
     /**

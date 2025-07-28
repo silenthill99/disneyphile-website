@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { User } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 type Tags = {
     id: number;
@@ -22,7 +23,7 @@ type FlashProps = {
 }
 
 const Tags = () => {
-    const { data, setData, post } = useForm<Required<TagsForm>>({
+    const { data, setData, post, reset } = useForm<Required<TagsForm>>({
         name: ''
     });
 
@@ -60,7 +61,9 @@ const Tags = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route('tags.store'));
+        post(route('tags.store'), {
+            onSuccess: () => reset()
+        });
     };
     return (
         <AppLayout>
@@ -75,8 +78,8 @@ const Tags = () => {
                         placeholder={'Ajouter un tag'}
                         value={data.name}
                         onChange={e => setData('name', e.target.value)}
-                    />
-                    <input type={'submit'} value={'Ajouter un tag'} />
+                    /> <br/>
+                    <Button type={'submit'} value={'Ajouter un tag'} >Ajouter un tag</Button>
                 </form>
             </div>
             <Separator />
