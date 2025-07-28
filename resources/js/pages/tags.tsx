@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { User } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 
 type Tags = {
     id: number;
@@ -25,7 +26,7 @@ const Tags = () => {
         name: ''
     });
 
-    const [selectedTag, setSelectedTag] = useState<{[userId: number]: string}>({})
+    const [selectedTag, setSelectedTag] = useState<{[userSlug: string]: string}>({})
 
     const { flash, users, tags_all } = usePage<{
         flash: FlashProps,
@@ -34,24 +35,25 @@ const Tags = () => {
         tags_all: Tags[]
     }>().props;
 
-    const handleTagChange = (userId: number, tagName: string) => {
+    const handleTagChange = (userSlug: string, tagName: string) => {
         setSelectedTag((prev) => ({
             ...prev,
-            [userId]: tagName,
+            [userSlug]: tagName,
         }));
     };
 
-    const handleAttachTag = (userId: number) => {
-        const tagName = selectedTag[userId];
+    const handleAttachTag = (userSlug: string) => {
+        const tagName = selectedTag[userSlug];
         if (!tagName) return;
 
         const tag = tags_all.find(t => t.name === tagName);
-
         if (!tag) return;
 
+        console.log(route('tags.attach', { user: userSlug, tag: tag.id }));
+
         router.post(route('tags.attach', {
-            user: userId,
-            tag: tag.id,
+            user: userSlug,
+            tag: tag.id
         }));
     };
 
@@ -93,15 +95,15 @@ const Tags = () => {
                                 <TableRow key={user.id}>
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.tags.map((tag, index) => (
-                                        <span key={index}>{tag.name}</span>
+                                        <Badge variant={"secondary"} key={index}>{tag.name}</Badge>
                                     ))}</TableCell>
-                                    <TableCell>
+                                    <TableCell className={"flex"}>
                                         <Select
-                                            value={selectedTag[user.id] || ""}
-                                            onValueChange={(value) => handleTagChange(user.id, value)}
+                                            value={selectedTag[user.slug] || ""}
+                                            onValueChange={(value) => handleTagChange(user.slug, value)}
                                         >
                                             <SelectTrigger>
-                                                {selectedTag[user.id] || "Choisissez un tag"}
+                                                {selectedTag[user.slug] || "Choisissez un tag"}
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {tags_all.map((tag) => (
@@ -112,7 +114,8 @@ const Tags = () => {
                                             </SelectContent>
                                         </Select>
                                         <button
-                                            onClick={() => handleAttachTag(user.id)}
+                                            onClick={() => handleAttachTag(user.slug)}
+                                            formMethod={"post"}
                                             className="bg-black text-white px-3 py-1 rounded hover:bg-gray-700 transition"
                                         >
                                             Ajouter

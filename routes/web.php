@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,7 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/tags', [TagController::class, "index"])->name('tags.index');
     Route::post('/tags', [TagController::class, "store"])->name('tags.store');
-    Route::post("/tags/attach", [TagController::class, "attach"])->name('tags.attach');
+    Route::post("/test-tags/{user:slug}/attach/{tag}", [TagController::class, 'attach'])->name('tags.attach');
 });
 
 Route::get("/members/{user}",[UserController::class, "show"])
