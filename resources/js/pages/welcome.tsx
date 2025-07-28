@@ -1,8 +1,19 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
 import { SharedData } from '@/types';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import DOMPurify from 'dompurify';
+import { Textarea } from '@/components/ui/textarea';
+
 export default function Welcome() {
     const {auth} = usePage<SharedData>().props;
+
+    const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
+    const rejex = /https?:\/\/[^\s]+/g;
+    const linkedText = text.replace(rejex, (url) => {
+        return `<a href="${url}" class="text-blue-500">${url}</a>`
+    })
+    DOMPurify.sanitize(linkedText);
     return (
         <PageLayout className="grid md:grid-cols-4 gap-5 h-full container mx-auto p-5">
             <Head title="Welcome">
@@ -22,12 +33,21 @@ export default function Welcome() {
 
             {/* Centre (le seul scrollable) */}
             <div className="col-span-2 rounded-2xl h-full overflow-y-auto p-4 backdrop-blur-md bg-white/80">
-
+                <div className={"bg-white min-h-50 rounded-2xl p-2"}>
+                    <Textarea className={"resize-none"} placeholder={"Ajouter un nouveau post"}/>
+                </div>
             </div>
 
             {/* Panneau droit (immobile, dans le flux) */}
-            <div className="hidden md:block bg-white rounded-2xl h-full overflow-hidden">
-                {/* contenu */}
+            <div className="hidden md:block bg-white rounded-2xl h-full overflow-hidden p-5">
+                <h2 className={"text-3xl text-center py-5"}>Suggestions</h2>
+                <div className={"flex items-center gap-2 border p-1"}>
+                    <Avatar>
+                        <AvatarFallback>DP</AvatarFallback>
+                    </Avatar>
+                    <p className={'text-sm'}>Disneyland Paris - Compte officiel</p>
+                    {/*<button className={"text-sm cursor-pointer active:bg-gray-300"}>S'abonner</button>*/}
+                </div>
             </div>
         </PageLayout>
     );
