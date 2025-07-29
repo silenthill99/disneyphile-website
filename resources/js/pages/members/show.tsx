@@ -23,7 +23,8 @@ const Show = () => {
     return (
         <PageLayout className={'p-5 container mx-auto grid grid-cols-4 gap-5'}>
             <Head title={user.name} />
-            <div className={'bg-white flex flex-col items-center p-2 rounded-md justify-center gap-10'}>
+            <div className={'bg-white flex flex-col items-center p-10 rounded-md gap-10 h-min sticky top-50'}>
+                <img src={auth.user.image_profile ? ("/storage/" + auth.user.image_profile) : ("/assets/images/logo.svg")} alt={"Photo de profil"} className={`w-50 h-50 object-cover rounded-full ${!auth.user.image_profile && "bg-gray-200"}`}/>
                 <h2 className={'text-3xl'}>{user.name}</h2>
                 {can.view && (
                     <Link href={route('dashboard')} className={"hover:underline"}>Accéder à mon tableau de bord</Link>
@@ -39,7 +40,7 @@ const Show = () => {
                     </div>
                 )}
             </div>
-            <div className={'bg-white/90 rounded-md md:col-span-3 backdrop-blur-md'}>
+            <div className={'bg-white/90 rounded-md md:col-span-3 backdrop-blur-md h-1000'}>
 
             </div>
         </PageLayout>

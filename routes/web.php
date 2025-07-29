@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,13 +19,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tags', [TagController::class, "index"])->name('tags.index');
     Route::post('/tags', [TagController::class, "store"])->name('tags.store');
     Route::post("/test-tags/{user:slug}/attach/{tag}", [TagController::class, 'attach'])->name('tags.attach');
+    Route::post("/dashboard/{user}", function (User $user, Request $request) {
+        $data = $request->validate([
+            'photo' => "nullable|image|max:8000"
+        ]);
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time()."_".$image->getClientOriginalName();
+            $data['image_profile'] = $image->storeAs('images', $imageName, 'public');
+        }
+        $user->update($data);
+    })->name("update-profile");
 });
 
 Route::middleware(GuestToLanding::class)->group(function () {
     Route::get('/', function () {
         return Inertia::render('welcome');
-    })->name('home');
-;
+    })->name('home');;
     Route::post("/", function () {
         return Inertia::render('welcome');
     })->name('search');
@@ -34,10 +45,9 @@ Route::get("/landing", function () {
     return Inertia::render('landing');
 })->name('landing');
 
-Route::get("/members/{user}",[UserController::class, "show"])
+Route::get("/members/{user}", [UserController::class, "show"])
     ->name('members.show');
 
-Route::view('/test-form', 'test');
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

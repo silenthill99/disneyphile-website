@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
 import { SharedData } from '@/types';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -15,14 +15,20 @@ export default function Welcome() {
     })
     DOMPurify.sanitize(linkedText);
     return (
-        <PageLayout className="grid md:grid-cols-5 gap-5 h-full container mx-auto py-5">
+        <PageLayout className="grid lg:grid-cols-5 gap-5 h-full container mx-auto py-5">
             <Head title="Welcome">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             {/* Panneau gauche (immobile, dans le flux) */}
-            <div className="hidden md:flex bg-white rounded-2xl h-full p-5 md:flex-col items-center gap-5">
-                <img src="/assets/images/logo.svg" className={"w-15 h-15 rounded-full bg-gray-200"} alt="" />
+            <div className="hidden lg:flex bg-white rounded-2xl h-full p-5 md:flex-col items-center gap-5">
+                <Avatar>
+                    {auth.user.image_profile ? (
+                        <AvatarImage src={"/storage/" + auth.user.image_profile}/>
+                    ) : (
+                        <AvatarImage src={"/assets/images/logo.svg"} className={"bg-gray-200"}/>
+                    )}
+                </Avatar>
                 <h2 className={"text-2xl"}>{auth.user.name}</h2>
                 <nav>
                     <ul>
@@ -32,14 +38,14 @@ export default function Welcome() {
             </div>
 
             {/* Centre (le seul scrollable) */}
-            <div className="col-span-3 rounded-2xl h-full overflow-y-auto p-4 backdrop-blur-md bg-white/80">
+            <div className="col-span-3 rounded-2xl h-full overflow p-4 backdrop-blur-md bg-white/80">
                 <div className={"bg-white min-h-50 rounded-2xl p-2"}>
                     <Textarea className={"resize-none"} placeholder={"Ajouter un nouveau post"}/>
                 </div>
             </div>
 
             {/* Panneau droit (immobile, dans le flux) */}
-            <div className="hidden md:block bg-white rounded-2xl h-full overflow-hidden p-5">
+            <div className="hidden lg:block bg-white rounded-2xl h-full overflow-hidden p-5">
                 <h2 className={"text-3xl text-center py-5"}>Suggestions</h2>
                 <div className={"flex items-center gap-2 border p-1"}>
                     <Avatar>

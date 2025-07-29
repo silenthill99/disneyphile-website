@@ -37,7 +37,7 @@ export interface User {
     slug: string;
     email: string;
     avatar?: string;
-    image_profile?: string | null;
+    image_profile?: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;

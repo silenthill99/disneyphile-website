@@ -1,7 +1,7 @@
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { FormEvent, FormEventHandler, useState } from 'react';
+import { FormEventHandler } from 'react';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
@@ -23,31 +23,13 @@ type ProfileForm = {
     name: string;
     email: string;
 }
-
-type ImageForm = {
-    image: File | null;
-}
-
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
-        email: auth.user.email,
+        email: auth.user.email
     });
-
-    const {data: fileData, setData: setFileData, patch: patchData, reset: resetFileData, errors: errorFile} = useForm<Required<ImageForm>>({
-        image: null as File | null
-    })
-
-    const imageChange = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('Contenu envoyé :', fileData.image);
-        patchData(route('profile.update.image'), {
-            forceFormData: true,
-            onSuccess: () => resetFileData()
-        })
-    }
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -56,8 +38,6 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
             preserveScroll: true,
         });
     };
-
-    const [img, setImg] = useState<string | null>(null);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -140,21 +120,6 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                 </div>
                 <div>
                     <h3 className={"mb-0.5 text-base font-medium"}>Change image profile</h3>
-                    <form onSubmit={imageChange} encType={"multipart/form-data"}>
-                        <Input type={"file"} name={"image"} accept={"image/*"}
-                               onChange={e => {
-                                   const file = e.target.files?.[0]
-                                   if (file) {
-                                       setFileData('image', file)
-                                       setImg(URL.createObjectURL(file))
-                                   }
-                               }}/>
-                        <Button type={"submit"}>Mettre à jour</Button>
-                        {errorFile.image}
-                        {img && (
-                            <img src={img} alt={"Preview"}/>
-                        )}
-                    </form>
                 </div>
                 <DeleteUser />
             </SettingsLayout>

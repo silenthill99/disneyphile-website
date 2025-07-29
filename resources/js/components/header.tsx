@@ -41,7 +41,7 @@ const Header = () => {
     const { auth } = usePage<SharedData>().props;
 
     return (
-        <header className={'sticky top-0 min-h-5 bg-blue-400 shadow'}>
+        <header className={'sticky top-0 z-50 min-h-5 bg-blue-400 shadow'}>
             <div className={'container mx-auto py-2 flex items-center justify-between'}>
                 <Link href={route('home')}>
                     <AppLogoIcon className={'h-auto w-10 text-white'} />
