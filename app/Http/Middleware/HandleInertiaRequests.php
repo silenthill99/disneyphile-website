@@ -57,9 +57,6 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
                 'loginError' => function() use($request) {
-                    Log::debug('loginError value in shared props', [
-                        'value' => $request->session()->get('loginError')
-                    ]);
                     return $request->session()->get('loginError');
                 },
                 'success' => function() use($request) {
