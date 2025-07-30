@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
+use App\Models\Group;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,6 +32,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
         $user->update($data);
     })->name("update-profile");
+
+    Route::get("/groups/create", [GroupController::class, "create"])->name("groups.create");
+    Route::get('/groups', [GroupController::class, "index"])->name("groups");
+    Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
 });
 
 Route::middleware(GuestToLanding::class)->group(function () {

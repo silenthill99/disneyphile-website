@@ -1,11 +1,12 @@
-<?php
+<?php /** @noinspection PhpUndefinedNamespaceInspection */
+
+/** @noinspection PhpUndefinedClassInspection */
 
 namespace App\Http\Middleware;
 
 use Gate;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -61,6 +62,9 @@ class HandleInertiaRequests extends Middleware
                 },
                 'success' => function() use($request) {
                     return $request->session()->get('success');
+                },
+                'createdGroup' => function() use($request) {
+                    return $request->session()->get('createdGroup');
                 }
             ]
         ];

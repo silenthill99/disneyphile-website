@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'role_id' => $roleId,
             'name' => $name,
+            'image_profile' => "images/1753808790_innamoramento.JPG",
             'slug' => Str::slug($name),
             'email' => "florian.graziani@sfr.fr",
             'email_verified_at' => now(),
