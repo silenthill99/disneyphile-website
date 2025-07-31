@@ -1,7 +1,6 @@
 import React from 'react';
 import PageLayout from '@/layouts/page-layout';
-import { Link, router, usePage } from '@inertiajs/react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { router, usePage } from '@inertiajs/react';
 import { User } from '@/types';
 
 type Group = {
@@ -18,44 +17,54 @@ type Props = {
             label: string;
             active: boolean;
         }[]
+        current_page: number;
+        from: number | null;
+        to: number | null;
+        total: number;
     }
 }
 
 const Index = () => {
     const {groups} = usePage<Props>().props;
-    return (
-        <PageLayout className={"container mx-auto bg-white/90 backdrop-blur-md p-10"}>
-            <h1>Liste des groupes</h1>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Nom du groupe</TableHead>
-                        <TableHead>Créateur</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {groups.data.map(group => (
-                        <TableRow key={group.id}>
-                            <TableCell>{group.name}</TableCell>
-                            <TableCell>
-                                <Link href={route("members.show", group.owner.slug)}>{group.owner.name}</Link>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
 
-            <div className="flex flex-wrap gap-1 mt-4">
-                {groups.links.map((link, index) => (
-                    <button
-                        key={index}
-                        disabled={!link.url}
-                        onClick={() => link.url && router.visit(link.url)}
-                        className={`px-2 py-1 rounded border ${link.active ? 'font-bold bg-blue-200' : 'bg-white'}`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                ))}
+    if (groups.links.length <= 1) return null;
+    return (
+        <PageLayout className={'container mx-auto my-5 rounded-2xl bg-white/80 backdrop-blur-md p-3'}>
+            <h1>Liste des groupes</h1>
+            <div className={"grid grid-cols-3 gap-5"}>{groups.data.map(group => (
+                <div key={group.id} className={'h-100 shadow bg-white rounded p-5'}>
+                    {group.name}
+                </div>
+            ))}</div>
+
+            <div className={"flex items-center justify-between"}>
+                <p>Affichage des résultats <span className={'font-semibold'}>{groups.from}</span> à <span
+                className={'font-semibold'}>{groups.to}</span> sur {groups.total}</p>
+                <div className="flex flex-wrap gap-1">
+                    {groups.links.map((link, index) => (
+                        <button
+                            key={index}
+                            disabled={!link.url}
+                            onClick={() => link.url && router.visit(link.url)}
+                            className={`rounded border px-2 py-1 ${link.active ? 'bg-blue-200 font-bold' : 'bg-white'}`}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
+                </div>
             </div>
+
+            {/*<nav className={'mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between'} aria-label={'Pagination Navigation'}>*/}
+            {/*    <div className="mb-4 text-sm text-gray-700 sm:mb-0 dark:text-gray-400">*/}
+            {/*        {groups.from !== null && groups.to !== null ? (*/}
+            {/*            <>*/}
+            {/*                Affichage de <span className="font-medium">{groups.from}</span> à <span className="font-medium">{groups.to}</span> sur{' '}*/}
+            {/*                <span className="font-medium">{groups.total}</span> résultats*/}
+            {/*            </>*/}
+            {/*        ) : (*/}
+            {/*            `${groups.total} résultats`*/}
+            {/*        )}*/}
+            {/*    </div>*/}
+            {/*</nav>*/}
         </PageLayout>
     );
 };

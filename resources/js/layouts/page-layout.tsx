@@ -9,7 +9,7 @@ const PageLayout = ({children, className}: Props) => {
     return (
         <div className={"min-h-screen flex flex-col bg-[url('/assets/images/background.jpg')] bg-cover bg-fixed"}>
             <Header />
-            <main className={`grow h-full ${className}`}>
+            <main className={`grow ${className}`}>
                 {children}
             </main>
         </div>

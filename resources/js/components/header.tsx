@@ -42,11 +42,11 @@ const Header = () => {
 
     return (
         <header className={'sticky top-0 z-50 min-h-5 bg-blue-400 shadow'}>
-            <div className={'container mx-auto py-2 flex items-center justify-between'}>
+            <div className={'container mx-auto py-2 px-5 md:px-0 flex items-center justify-between'}>
                 <Link href={route('home')}>
                     <AppLogoIcon className={'h-auto w-10 text-white'} />
                 </Link>
-                <form className={'space-x-2'} onSubmit={handleSubmit}>
+                <form className={'space-x-2 hidden md:block'} onSubmit={handleSubmit}>
                     <input type="search" name="" id="" placeholder={'Recherche'} className={'bg-white'} />
                     <Button type={'submit'}>Valider</Button>
                 </form>
@@ -80,7 +80,7 @@ const Header = () => {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-                        <Mailbox className={"w-5 text-white "}/>
+                        <Mailbox className={"w-5 text-white hidden md:block"}/>
                     </div>
                 ) : (
                     <form onSubmit={handleLogin} className={'space-x-2'}>
