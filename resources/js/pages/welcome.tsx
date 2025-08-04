@@ -4,7 +4,8 @@ import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -58,8 +59,10 @@ export default function Welcome() {
                     <Dialog>
                         <DialogTrigger>Créer un nouveau post</DialogTrigger>
                         <DialogContent>
-                            <form action="">
-                                <Textarea placeholder={'Ajoutez votre contenu'} />
+                            <DialogTitle>Créer un nouveau post</DialogTitle>
+                            <form method={"post"}>
+                                <Textarea placeholder={'Ajoutez votre contenu'} className={"h-50 resize-none"} /> <br/>
+                                <Button>Créer le post</Button>
                             </form>
                         </DialogContent>
                     </Dialog>
