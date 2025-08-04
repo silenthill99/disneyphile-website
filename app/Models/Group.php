@@ -15,7 +15,9 @@ class Group extends Model
         'owner_id',
         'slug',
         'name',
-        'private'
+        'private',
+        'description',
+        'bannier'
     ];
 
     public function owner(): BelongsTo

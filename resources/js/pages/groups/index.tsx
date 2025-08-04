@@ -1,12 +1,14 @@
 import React from 'react';
 import PageLayout from '@/layouts/page-layout';
-import { router, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { User } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Group = {
     id: number,
     name: string,
-    owner: User
+    owner: User,
+    description: string
 }
 
 type Props = {
@@ -25,21 +27,30 @@ type Props = {
 }
 
 const Index = () => {
-    const {groups} = usePage<Props>().props;
+    const { groups } = usePage<Props>().props;
 
     if (groups.links.length <= 1) return null;
     return (
         <PageLayout className={'container mx-auto my-5 rounded-2xl bg-white/80 backdrop-blur-md p-3'}>
             <h1>Liste des groupes</h1>
-            <div className={"grid grid-cols-3 gap-5"}>{groups.data.map(group => (
-                <div key={group.id} className={'h-100 shadow bg-white rounded p-5'}>
-                    {group.name}
-                </div>
-            ))}</div>
+            <Link href={route("groups.create")} className={"text-blue-500 hover:text-purple-500 hover:underline"}>Créer un groupe</Link><br/><br/>
+            <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
+                {groups.data.map(group => (
+                    <Card className={"overflow-hidden"} key={group.id}>
+                        <CardHeader>
+                            <img src={"/assets/images/background.jpg"} alt={"Bannière"}/>
+                            <CardTitle>{group.name}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
 
-            <div className={"flex items-center justify-between"}>
+            <div className={'flex items-center justify-between'}>
                 <p>Affichage des résultats <span className={'font-semibold'}>{groups.from}</span> à <span
-                className={'font-semibold'}>{groups.to}</span> sur {groups.total}</p>
+                    className={'font-semibold'}>{groups.to}</span> sur {groups.total}</p>
                 <div className="flex flex-wrap gap-1">
                     {groups.links.map((link, index) => (
                         <button

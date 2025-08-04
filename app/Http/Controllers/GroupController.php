@@ -17,14 +17,18 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        $user = Auth::user();
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'private' => 'required|boolean',
+            'banniere' => "nullable|image|max:8000",
+            'description' => "required|string"
         ]);
-        $data['owner_id'] = $user->id;
 
-        Group::create($data);
+        $imageFile = $request->file('banniere');
+        $imageName = time() . "_" . $imageFile->getClientOriginalName();
+        $data["bannier"] = "/storage/".$imageFile->storeAs("images", $imageName, "public");
+
+        Auth::user()->createdGroups()->create($data);
 
         return redirect()->back()->with('createdGroup', "Groupe créé avec succès");
     }

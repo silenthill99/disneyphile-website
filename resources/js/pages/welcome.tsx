@@ -4,6 +4,7 @@ import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Textarea } from '@/components/ui/textarea';
+import NavLink from '@/components/nav-link';
 
 export default function Welcome() {
     const {auth} = usePage<SharedData>().props;
@@ -31,6 +32,7 @@ export default function Welcome() {
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
                 <nav>
+                    <NavLink className={"text-red-500"}/>
                     <ul className={"space-y-2"}>
                         <li>
                             <Link href={route('members.index')} className={'hover:underline'}>

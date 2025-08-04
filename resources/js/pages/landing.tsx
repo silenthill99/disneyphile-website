@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useForm } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 
 type LoginProps = {
     email: string;
@@ -18,12 +19,12 @@ type RegisterProps = {
 }
 const Landing = () => {
 
-    const {data: loginData, setData: setLoginData, post:postLogin} = useForm<Required<LoginProps>>({
+    const {data: loginData, setData: setLoginData, post:postLogin, processing: loginProcessing} = useForm<Required<LoginProps>>({
         email: "",
         password: ""
     })
 
-    const {data: registerData, setData: setRegisterData, post: postRegister} = useForm<Required<RegisterProps>>({
+    const {data: registerData, setData: setRegisterData, post: postRegister, processing: registerProcessing} = useForm<Required<RegisterProps>>({
         email: "",
         name: "",
         password: "",
@@ -84,7 +85,9 @@ const Landing = () => {
                                     value={registerData.password_confirmation}
                                     onChange={e => setRegisterData("password_confirmation", e.target.value)}
                                 /> <br/>
-                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Rejoignez la magie</Button>
+                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Rejoignez la magie
+                                    {registerProcessing && <LoaderCircle className={"animate-spin"}/> }
+                                </Button>
                             </form>
                         </TabsContent>
                         <TabsContent value={"login"}>
@@ -103,7 +106,7 @@ const Landing = () => {
                                     value={loginData.password}
                                     onChange={e => setLoginData('password', e.target.value)}
                                 /> <br/>
-                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Bon retour parmi nous !</Button>
+                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Bon retour parmi nous ! {loginProcessing && <LoaderCircle className={"animate-spin"}/>}</Button>
                             </form>
                         </TabsContent>
                     </Tabs>
