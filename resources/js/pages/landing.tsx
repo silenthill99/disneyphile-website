@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+import InfosCGU from '@/components/infos-cgu';
 
 type LoginProps = {
     email: string;
@@ -42,72 +43,92 @@ const Landing = () => {
     }
 
     return (
-        <div className={"bg-[url('/disneyland-486098.jpg')] min-h-screen bg-cover bg-center bg-fixed flex flex-col"}>
+        <div className={"flex min-h-screen flex-col bg-[url('/disneyland-486098.jpg')] bg-cover bg-fixed bg-center"}>
             {/*<Header />*/}
-            <main className={"grow flex items-center justify-center bg-black/50 gap-10"}>
-                <div className={"container mx-auto grid md:grid-cols-2"}>
-                    <div className={"text-white flex flex-col justify-center"}>
-                        <h1 className={"text-5xl font-bold mb-2 drop-shadow-lg"}>Disneyphile</h1>
-                        <p className={"text-lg text-white/80"}>Là où la magie prends vie</p>
+            <main className={'flex grow items-center justify-center gap-10 bg-black/50'}>
+                <div className={'container mx-auto grid md:grid-cols-2'}>
+                    <div className={'flex flex-col justify-center text-white'}>
+                        <h1 className={'mb-2 text-5xl font-bold drop-shadow-lg'}>Disneyphile</h1>
+                        <p className={'text-lg text-white/80'}>Là où la magie prends vie</p>
                     </div>
-                    <Tabs defaultValue={"register"} >
+                    <Tabs defaultValue={'register'} className={'h-100'}>
                         <TabsList>
-                            <TabsTrigger value={"register"}>Créer un compte</TabsTrigger>
-                            <TabsTrigger value={"login"}>Se connecter</TabsTrigger>
+                            <TabsTrigger value={'register'}>Créer un compte</TabsTrigger>
+                            <TabsTrigger value={'login'}>Se connecter</TabsTrigger>
                         </TabsList>
-                        <TabsContent value={"register"}>
-                            <form onSubmit={registerSubmit} className={"bg-white/90 backdrop-blur-sm min-h-100 min-w-100 rounded-xl p-5 shadow-xl ring-1 ring-white/10"}>
+                        <TabsContent
+                            value={'register'}
+                            className={
+                                'flex min-w-100 flex-col rounded-xl bg-white/90 p-5 shadow-xl ring-1 ring-white/10 backdrop-blur-sm'
+                            }
+                        >
+                            <form onSubmit={registerSubmit}>
                                 <Label>Adresse mail</Label>
                                 <Input
-                                    type={"email"}
-                                    placeholder={"Votre adresse mail"}
+                                    type={'email'}
+                                    placeholder={'Votre adresse mail'}
                                     value={registerData.email}
-                                    onChange={e => setRegisterData("email", e.target.value)}
-                                /> <br/>
+                                    onChange={(e) => setRegisterData('email', e.target.value)}
+                                />{' '}
+                                <br />
                                 <Label>Votre nom</Label>
                                 <Input
-                                    type={"text"}
-                                    placeholder={"Votre nom"}
+                                    type={'text'}
+                                    placeholder={'Votre nom'}
                                     value={registerData.name}
-                                    onChange={e => setRegisterData("name", e.target.value)}
-                                /><br/>
+                                    onChange={(e) => setRegisterData('name', e.target.value)}
+                                />
+                                <br />
                                 <Label>Votre mot de passe</Label>
                                 <Input
-                                    type={"password"}
-                                    placeholder={"Votre mot de passe"}
+                                    type={'password'}
+                                    placeholder={'Votre mot de passe'}
                                     value={registerData.password}
-                                    onChange={e => setRegisterData("password", e.target.value)}
-                                /> <br/>
+                                    onChange={(e) => setRegisterData('password', e.target.value)}
+                                />{' '}
+                                <br />
                                 <Label>Confirmez votre mot de passe</Label>
                                 <Input
-                                    type={"password"}
-                                    placeholder={"Confirmez votre mot de passe"}
+                                    type={'password'}
+                                    placeholder={'Confirmez votre mot de passe'}
                                     value={registerData.password_confirmation}
-                                    onChange={e => setRegisterData("password_confirmation", e.target.value)}
-                                /> <br/>
-                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Rejoignez la magie
-                                    {registerProcessing && <LoaderCircle className={"animate-spin"}/> }
+                                    onChange={(e) => setRegisterData('password_confirmation', e.target.value)}
+                                />{' '}
+                                <br />
+                                <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
+                                    Rejoignez la magie
+                                    {registerProcessing && <LoaderCircle className={'animate-spin'} />}
                                 </Button>
                             </form>
+                            <br />
+                            <InfosCGU className={'text-sm'} />
                         </TabsContent>
-                        <TabsContent value={"login"}>
-                            <form className={"min-w-100 min-h-100 bg-white/90 backdrop-blur-sm rounded-xl p-5"} onSubmit={loginSubmit}>
+                        <TabsContent
+                            value={'login'}
+                            className={'flex min-w-100 flex-col justify-between rounded-xl bg-white/90 p-5 backdrop-blur-sm'}
+                        >
+                            <form onSubmit={loginSubmit}>
                                 <Label>Adresse mail</Label>
                                 <Input
-                                    type={"email"}
-                                    placeholder={"Adresse mail"}
+                                    type={'email'}
+                                    placeholder={'Adresse mail'}
                                     value={loginData.email}
-                                    onChange={e => setLoginData('email', e.target.value)}
-                                /> <br/>
+                                    onChange={(e) => setLoginData('email', e.target.value)}
+                                />{' '}
+                                <br />
                                 <Label>Mot de pase</Label>
                                 <Input
-                                    type={"password"}
-                                    placeholder={"Votre mot de passe"}
+                                    type={'password'}
+                                    placeholder={'Votre mot de passe'}
                                     value={loginData.password}
-                                    onChange={e => setLoginData('password', e.target.value)}
-                                /> <br/>
-                                <Button type={"submit"} className={"hover:bg-pink-600 cursor-pointer transition-all duration-200 ease-in-out"}>Bon retour parmi nous ! {loginProcessing && <LoaderCircle className={"animate-spin"}/>}</Button>
+                                    onChange={(e) => setLoginData('password', e.target.value)}
+                                />{' '}
+                                <br />
+                                <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
+                                    Bon retour parmi nous ! {loginProcessing && <LoaderCircle className={'animate-spin'} />}
+                                </Button>
                             </form>
+                            <InfosCGU className={'text-sm'} />
                         </TabsContent>
                     </Tabs>
                 </div>

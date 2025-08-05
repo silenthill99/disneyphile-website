@@ -3,7 +3,8 @@ import PageLayout from '@/layouts/page-layout';
 import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
-import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import Create from '@/components/articles/create';
 
 export default function Welcome() {
     const {auth} = usePage<SharedData>().props;
@@ -46,9 +47,15 @@ export default function Welcome() {
 
             {/* Centre (le seul scrollable) */}
             <div className="overflow col-span-3 h-full rounded-2xl bg-white/80 p-4 backdrop-blur-md">
-                <div className={'min-h-50 rounded-2xl bg-white p-2'}>
-                    <Textarea className={'resize-none'} placeholder={'Ajouter un nouveau post'} />
-                </div>
+                <Dialog>
+                    <DialogTrigger className={"bg-white w-full inline-block text-left p-2 rounded-full cursor-pointer"}>Créer un nouvel article</DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Créer un nouvel article</DialogTitle>
+                            <Create/>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
             </div>
 
             {/* Panneau droit (immobile, dans le flux) */}
