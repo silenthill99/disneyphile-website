@@ -4,16 +4,17 @@ import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Textarea } from '@/components/ui/textarea';
-import NavLink from '@/components/nav-link';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function Welcome() {
-    const {auth} = usePage<SharedData>().props;
+    const { auth } = usePage<SharedData>().props;
 
-    const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
+    const text = 'Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU';
     const rejex = /https?:\/\/[^\s]+/g;
     const linkedText = text.replace(rejex, (url) => {
-        return `<a href="${url}" class="text-blue-500">${url}</a>`
-    })
+        return `<a href="${url}" class="text-blue-500">${url}</a>`;
+    });
     DOMPurify.sanitize(linkedText);
     return (
         <PageLayout className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
@@ -22,25 +23,26 @@ export default function Welcome() {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             {/* Panneau gauche (immobile, dans le flux) */}
-            <div className="hidden h-full items-center gap-5 rounded-2xl bg-white p-5 md:flex-col lg:flex text-center">
+            <div className="hidden h-full items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
                     {auth.user.image_profile ? (
-                        <AvatarImage src={'/storage/' + auth.user.image_profile} className={"object-cover"}/>
+                        <AvatarImage src={'/storage/' + auth.user.image_profile} />
                     ) : (
                         <AvatarImage src={'/assets/images/logo.svg'} className={'bg-gray-200'} />
                     )}
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
                 <nav>
-                    <NavLink className={"text-red-500"}/>
-                    <ul className={"space-y-2"}>
+                    <ul className={'space-y-2'}>
                         <li>
                             <Link href={route('members.index')} className={'hover:underline'}>
                                 Liste des membres
                             </Link>
                         </li>
                         <li>
-                            <Link href={route("groups")} className={"hover:underline"}>Liste des groupes</Link>
+                            <Link href={route('groups')} className={'hover:underline'}>
+                                Liste des groupes
+                            </Link>
                         </li>
                     </ul>
                 </nav>
@@ -48,8 +50,22 @@ export default function Welcome() {
 
             {/* Centre (le seul scrollable) */}
             <div className="overflow col-span-3 h-full rounded-2xl bg-white/80 p-4 backdrop-blur-md">
-                <div className={'min-h-50 rounded-2xl bg-white p-2'}>
-                    <Textarea className={'resize-none'} placeholder={'Ajouter un nouveau post'} />
+                <div className={'h-min rounded-2xl bg-white p-2'}>
+                    {/*<Textarea className={'resize-none'} placeholder={'Ajouter un nouveau post'} /> <br/>*/}
+                    {/*<div className={"flex gap-2"}>*/}
+                    {/*    <ImageIcon className={"text-red-500"}/>*/}
+                    {/*    <VideoIcon className={"text-green-400"}/>*/}
+                    {/*</div>*/}
+                    <Dialog>
+                        <DialogTrigger>Créer un nouveau post</DialogTrigger>
+                        <DialogContent>
+                            <DialogTitle>Créer un nouveau post</DialogTitle>
+                            <form method={"post"}>
+                                <Textarea placeholder={'Ajoutez votre contenu'} className={"h-50 resize-none"} /> <br/>
+                                <Button>Créer le post</Button>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
