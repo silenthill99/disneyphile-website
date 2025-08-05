@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/tags', [TagController::class, "index"])->name('tags.index');
     Route::post('/tags', [TagController::class, "store"])->name('tags.store');
-    Route::post("/test-tags/{user:slug}/attach/{tag}", [TagController::class, 'attach'])->name('tags.attach');
+    Route::post("/tags/{user}/attach/{tag}", [TagController::class, 'attach'])->name('tags.attach');
     Route::post("/dashboard/{user}", function (User $user, Request $request) {
         $data = $request->validate([
             'photo' => "nullable|image|max:8000"

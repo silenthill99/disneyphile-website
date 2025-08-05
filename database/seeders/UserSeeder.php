@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -29,5 +30,7 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        User::factory()->count(49)->create();
     }
 }

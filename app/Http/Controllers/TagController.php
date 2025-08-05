@@ -14,7 +14,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Auth::user()->tags;
-        $users = User::with('tags')->get();
+        $users = User::with('tags')->paginate(25);
         $tags_all = Tag::all();
         return Inertia::render("tags", compact(["tags", "users", "tags_all"]));
     }

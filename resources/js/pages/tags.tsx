@@ -1,13 +1,12 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent } from 'react';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { User } from '@/types';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import TagRow from '@/components/tag-row';
 
 type Tags = {
     id: number;
@@ -22,41 +21,24 @@ type FlashProps = {
     success?: string
 }
 
+type PaginatedUsers<T> = {
+    data: T[],
+    links: {
+        url: string | null,
+        label: string,
+        active: boolean
+    }[]
+}
 const Tags = () => {
     const { data, setData, post, reset } = useForm<Required<TagsForm>>({
         name: ''
     });
 
-    const [selectedTag, setSelectedTag] = useState<{[userSlug: string]: string}>({})
-
     const { flash, users, tags_all } = usePage<{
         flash: FlashProps,
-        tags: Tags[],
-        users: (User & {tags: Tags[]})[],
+        users: PaginatedUsers<User & {tags: Tags[]}>,
         tags_all: Tags[]
     }>().props;
-
-    const handleTagChange = (userSlug: string, tagName: string) => {
-        setSelectedTag((prev) => ({
-            ...prev,
-            [userSlug]: tagName,
-        }));
-    };
-
-    const handleAttachTag = (userSlug: string) => {
-        const tagName = selectedTag[userSlug];
-        if (!tagName) return;
-
-        const tag = tags_all.find(t => t.name === tagName);
-        if (!tag) return;
-
-        console.log(route('tags.attach', { user: userSlug, tag: tag.id }));
-
-        router.post(route('tags.attach', {
-            user: userSlug,
-            tag: tag.id
-        }));
-    };
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -93,42 +75,22 @@ const Tags = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users.map((user) => {
-                            return (
-                                <TableRow key={user.id}>
-                                    <TableCell>{user.name}</TableCell>
-                                    <TableCell>{user.tags.map((tag, index) => (
-                                        <Badge variant={"secondary"} key={index}>{tag.name}</Badge>
-                                    ))}</TableCell>
-                                    <TableCell className={"flex"}>
-                                        <Select
-                                            value={selectedTag[user.slug] || ""}
-                                            onValueChange={(value) => handleTagChange(user.slug, value)}
-                                        >
-                                            <SelectTrigger>
-                                                {selectedTag[user.slug] || "Choisissez un tag"}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {tags_all.map((tag) => (
-                                                    <SelectItem key={tag.name} value={tag.name}>
-                                                        {tag.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <button
-                                            onClick={() => handleAttachTag(user.slug)}
-                                            formMethod={"post"}
-                                            className="bg-black text-white px-3 py-1 rounded hover:bg-gray-700 transition"
-                                        >
-                                            Ajouter
-                                        </button>
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
+                        {users.data.map((user) => (
+                            <TagRow key={user.id} user={user} tags_all={tags_all}/>
+                        ))}
                     </TableBody>
                 </Table>
+            </div>
+            <div className={"space-x-5"}>
+                {users.links.map((link, index) => (
+                    <button
+                        key={index}
+                        disabled={!link.url}
+                        onClick={() => link.url && router.visit(link.url)}
+                        dangerouslySetInnerHTML={{__html: link.label}}
+                        className={`border px-2 py-1 rounded ${link.active && "font-bold"} ${link.url && "cursor-pointer"}`}
+                    />
+                ))}
             </div>
         </AppLayout>
     );

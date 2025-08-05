@@ -25,7 +25,7 @@ export default function Welcome() {
             <div className="hidden h-full items-center gap-5 rounded-2xl bg-white p-5 md:flex-col lg:flex text-center">
                 <Avatar>
                     {auth.user.image_profile ? (
-                        <AvatarImage src={'/storage/' + auth.user.image_profile} />
+                        <AvatarImage src={'/storage/' + auth.user.image_profile} className={"object-cover"}/>
                     ) : (
                         <AvatarImage src={'/assets/images/logo.svg'} className={'bg-gray-200'} />
                     )}
