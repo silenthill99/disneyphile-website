@@ -5,12 +5,14 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
 use App\Models\Group;
+use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+/** @noinspection PhpParamsInspection */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -40,8 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(GuestToLanding::class)->group(function () {
     Route::get('/', function () {
-        return Inertia::render('welcome');
-    })->name('home');;
+        $posts = Post::all();
+        return Inertia::render('welcome', compact('posts'));
+    })->name('home');
     Route::post("/", function () {
         return Inertia::render('welcome');
     })->name('search');
@@ -54,6 +57,9 @@ Route::get("/landing", function () {
 Route::get("/members/{user}", [UserController::class, "show"])
     ->name('members.show');
 
+Route::get('/rules', function () {
+    return Inertia::render('rules');
+})->name('rules');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

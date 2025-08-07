@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 const InfosCGU = ({...props}: HTMLAttributes<HTMLParagraphElement>) => {
     return (
         <p {...props}>
-            En rejoignant notre communauté, vous acceptez nos <Link href={""} className={"underline text-blue-400 active:text-purple-600"}>Conditions Générales d'Utilisation</Link>
+            En rejoignant notre communauté, vous acceptez nos <Link href={route('rules')} className={"underline text-blue-400 active:text-purple-600"}>Conditions Générales d'Utilisation</Link>
         </p>
     );
 };

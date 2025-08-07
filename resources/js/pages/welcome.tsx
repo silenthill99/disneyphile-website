@@ -10,7 +10,7 @@ export default function Welcome() {
     const {auth} = usePage<SharedData>().props;
 
     const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
-    const rejex = /https?:\/\/[^\s]+/g;
+    const rejex = /https?:\/\/\S+/g;
     const linkedText = text.replace(rejex, (url) => {
         return `<a href="${url}" class="text-blue-500">${url}</a>`
     })
