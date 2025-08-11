@@ -34,7 +34,7 @@ const Landing = () => {
 
     function loginSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        postLogin(route('login'))
+        postLogin(route('login.store'))
     }
 
     function registerSubmit(e: FormEvent<HTMLFormElement>) {
