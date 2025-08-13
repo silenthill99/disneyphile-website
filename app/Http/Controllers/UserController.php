@@ -18,12 +18,14 @@ class UserController extends Controller
     public function show(User $user)
     {
         $tags = $user->tags;
+        $posts = $user->posts();
         return Inertia::render('members/show', [
             "user" => $user,
             "tags" => $tags,
             'can' => [
                 'view' => Gate::allows('view', $user)
-            ]
+            ],
+            "posts" => $posts
         ]);
     }
 }

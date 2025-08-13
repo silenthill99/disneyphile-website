@@ -60,6 +60,9 @@ const Header = () => {
                                 <li>
                                     <Link href={route("members.show", auth.user.slug)} className={"underline decoration-transparent hover:decoration-white duration-200"}>Profil</Link>
                                 </li>
+                                <li>
+                                    <Link href={route("logout")} className={"underline decoration-transparent hover:decoration-white duration-200 cursor-pointer"} method={"post"}>Se déconnecter</Link>
+                                </li>
                             </ul>
                         </nav>
                         <div className={"md:hidden"}>

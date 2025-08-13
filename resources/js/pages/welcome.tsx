@@ -1,13 +1,33 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
-import { SharedData } from '@/types';
+import { SharedData, User } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Create from '@/components/articles/create';
+import { useInitials } from '@/hooks/use-initials';
+import RightArrow from '@/components/right-arrow';
+
+type Group = {
+    user: User,
+    name: string,
+    description: string,
+    bannier?: string | null,
+    private: boolean
+}
+
+type Post = {
+    id: number,
+    user: User,
+    group?: Group | null,
+    content: string,
+    image_path?: string | null,
+    visibility: boolean,
+    created_at: string
+}
 
 export default function Welcome() {
-    const {auth} = usePage<SharedData>().props;
+    const {auth, posts} = usePage<SharedData & {posts: Post[]}>().props;
 
     const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
     const rejex = /https?:\/\/\S+/g;
@@ -15,6 +35,8 @@ export default function Welcome() {
         return `<a href="${url}" class="text-blue-500">${url}</a>`
     })
     DOMPurify.sanitize(linkedText);
+
+    const getInitials = useInitials();
     return (
         <PageLayout className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
             <Head title="Welcome">
@@ -22,40 +44,76 @@ export default function Welcome() {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             {/* Panneau gauche (immobile, dans le flux) */}
-            <div className="hidden h-full items-center gap-5 rounded-2xl bg-white p-5 md:flex-col lg:flex text-center">
+            <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
                     {auth.user.image_profile ? (
-                        <AvatarImage src={'/storage/' + auth.user.image_profile} className={"object-cover"}/>
+                        <AvatarImage src={'/storage/' + auth.user.image_profile} className={'object-cover'} />
                     ) : (
                         <AvatarImage src={'/assets/images/logo.svg'} className={'bg-gray-200'} />
                     )}
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
                 <nav>
-                    <ul className={"space-y-2"}>
+                    <ul className={'space-y-2'}>
                         <li>
                             <Link href={route('members.index')} className={'hover:underline'}>
                                 Liste des membres
                             </Link>
                         </li>
                         <li>
-                            <Link href={route("groups")} className={"hover:underline"}>Liste des groupes</Link>
+                            <Link href={route('groups')} className={'hover:underline'}>
+                                Liste des groupes
+                            </Link>
                         </li>
                     </ul>
                 </nav>
             </div>
 
             {/* Centre (le seul scrollable) */}
-            <div className="overflow col-span-3 h-full rounded-2xl bg-white/80 p-4 backdrop-blur-md">
+            <div className="overflow-y-auto col-span-3 h-full rounded-2xl bg-white/80 p-4 backdrop-blur-md">
                 <Dialog>
-                    <DialogTrigger className={"bg-white w-full inline-block text-left p-2 rounded-full cursor-pointer"}>Créer un nouvel article</DialogTrigger>
+                    <DialogTrigger className={'inline-block w-full cursor-pointer rounded-full bg-white p-2 text-left'}>
+                        Créer un nouvel article
+                    </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Créer un nouvel article</DialogTitle>
-                            <Create/>
+                            <Create />
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
+                <div className={'my-20 space-y-5'}>
+                    {posts.map((p) => (
+                        <div key={p.id}>
+                            <div className={'rounded bg-white p-5 space-y-5'}>
+                                <div className={"flex items-center justify-between"}>
+                                    <div className={'flex items-center gap-5'}>
+                                        <Link href={route('members.show', p.user.slug)}
+                                              className={'flex items-center gap-5'}>
+                                            <Avatar>
+                                                <AvatarImage src={'/storage/' + p.user.image_profile}
+                                                             className={'object-cover'} />
+                                                <AvatarFallback>{getInitials(p.user.name)}</AvatarFallback>
+                                            </Avatar>
+                                            <span>{p.user.name}</span>
+                                        </Link>
+                                        {p.group && (
+                                            <>
+                                                <RightArrow className={'w-5 h-5'} />
+                                                <Link href={route('groups.create')}>{p.group.name}</Link>
+                                            </>
+                                        )}
+                                    </div>
+                                    <p className={"text-gray-400"}>Le {new Date().toLocaleDateString(navigator.language, {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}</p></div>
+                                <p>{p.content}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* Panneau droit (immobile, dans le flux) */}

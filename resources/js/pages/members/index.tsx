@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 const Index = () => {
     const {users} = usePage<{users: User[]}>().props
     return (
-        <PageLayout className={'container mx-auto my-20 rounded-2xl bg-white p-5'}>
+        <PageLayout className={'container mx-auto my-20 rounded-2xl bg-white p-5 overflow-y-auto'}>
             <Head title={'Membres'} />
             <h1>Liste des membres</h1>
             <Table>

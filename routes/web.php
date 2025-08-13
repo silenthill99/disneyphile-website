@@ -41,10 +41,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(GuestToLanding::class)->group(function () {
+
     Route::get('/', function () {
-        $posts = Post::all();
+        $posts = Post::with("user", "group")->get();
         return Inertia::render('welcome', compact('posts'));
     })->name('home');
+
     Route::post("/", function () {
         return Inertia::render('welcome');
     })->name('search');

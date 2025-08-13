@@ -9,11 +9,6 @@
     @vite("resources/css/app.css")
 </head>
 <body>
-    <form method="post" action={{route('profile.update.image')}} enctype="multipart/form-data">
-        @csrf
-        @method('PATCH')
-        <input type="file" name="image" />
-        <button type="submit">Envoyer</button>
-    </form>
+
 </body>
 </html>

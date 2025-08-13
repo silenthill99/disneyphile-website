@@ -20,12 +20,12 @@ type RegisterProps = {
 }
 const Landing = () => {
 
-    const {data: loginData, setData: setLoginData, post:postLogin, processing: loginProcessing} = useForm<Required<LoginProps>>({
+    const {data: loginData, setData: setLoginData, post:postLogin, processing: loginProcessing, errors: loginErrors} = useForm<Required<LoginProps>>({
         email: "",
         password: ""
     })
 
-    const {data: registerData, setData: setRegisterData, post: postRegister, processing: registerProcessing} = useForm<Required<RegisterProps>>({
+    const {data: registerData, setData: setRegisterData, post: postRegister, processing: registerProcessing, errors: registerErrors} = useForm<Required<RegisterProps>>({
         email: "",
         name: "",
         password: "",
@@ -53,14 +53,12 @@ const Landing = () => {
                     </div>
                     <Tabs defaultValue={'register'} className={'h-100'}>
                         <TabsList>
-                            <TabsTrigger value={'register'}>Créer un compte</TabsTrigger>
-                            <TabsTrigger value={'login'}>Se connecter</TabsTrigger>
+                            <TabsTrigger value={'register'} className={"cursor-pointer"}>Créer un compte</TabsTrigger>
+                            <TabsTrigger value={'login'} className={"cursor-pointer"}>Se connecter</TabsTrigger>
                         </TabsList>
                         <TabsContent
                             value={'register'}
-                            className={
-                                'flex min-w-100 flex-col rounded-xl bg-white/90 p-5 shadow-xl ring-1 ring-white/10 backdrop-blur-sm'
-                            }
+                            className={'flex min-w-100 flex-col rounded-xl bg-white/90 p-5 shadow-xl ring-1 ring-white/10 backdrop-blur-sm'}
                         >
                             <form onSubmit={registerSubmit}>
                                 <Label>Adresse mail</Label>
@@ -69,7 +67,10 @@ const Landing = () => {
                                     placeholder={'Votre adresse mail'}
                                     value={registerData.email}
                                     onChange={(e) => setRegisterData('email', e.target.value)}
-                                />{' '}
+                                />
+                                {registerErrors.email && (
+                                    <p className={"text-red-500"}>{registerErrors.email}</p>
+                                )}
                                 <br />
                                 <Label>Votre nom</Label>
                                 <Input
@@ -78,6 +79,9 @@ const Landing = () => {
                                     value={registerData.name}
                                     onChange={(e) => setRegisterData('name', e.target.value)}
                                 />
+                                {registerErrors.name && (
+                                    <p className={"text-red-500"}>{registerErrors.name}</p>
+                                )}
                                 <br />
                                 <Label>Votre mot de passe</Label>
                                 <Input
@@ -85,7 +89,10 @@ const Landing = () => {
                                     placeholder={'Votre mot de passe'}
                                     value={registerData.password}
                                     onChange={(e) => setRegisterData('password', e.target.value)}
-                                />{' '}
+                                />
+                                {registerErrors.password && (
+                                    <p className={"text-red-500"}>{registerErrors.password}</p>
+                                )}
                                 <br />
                                 <Label>Confirmez votre mot de passe</Label>
                                 <Input
@@ -93,7 +100,10 @@ const Landing = () => {
                                     placeholder={'Confirmez votre mot de passe'}
                                     value={registerData.password_confirmation}
                                     onChange={(e) => setRegisterData('password_confirmation', e.target.value)}
-                                />{' '}
+                                />
+                                {registerErrors.password_confirmation && (
+                                    <p className={"text-red-500"}>{registerErrors.password_confirmation}</p>
+                                )}
                                 <br />
                                 <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
                                     Rejoignez la magie
@@ -114,7 +124,10 @@ const Landing = () => {
                                     placeholder={'Adresse mail'}
                                     value={loginData.email}
                                     onChange={(e) => setLoginData('email', e.target.value)}
-                                />{' '}
+                                />
+                                {loginErrors.email && (
+                                    <p className={"text-red-500"}>{loginErrors.email}</p>
+                                )}
                                 <br />
                                 <Label>Mot de pase</Label>
                                 <Input
@@ -122,7 +135,10 @@ const Landing = () => {
                                     placeholder={'Votre mot de passe'}
                                     value={loginData.password}
                                     onChange={(e) => setLoginData('password', e.target.value)}
-                                />{' '}
+                                />
+                                {loginErrors.password && (
+                                    <p className={"text-red-500"}>{loginErrors.password}</p>
+                                )}
                                 <br />
                                 <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
                                     Bon retour parmi nous ! {loginProcessing && <LoaderCircle className={'animate-spin'} />}

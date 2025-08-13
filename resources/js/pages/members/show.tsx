@@ -40,7 +40,7 @@ const Show = () => {
                     </div>
                 )}
             </div>
-            <div className={'bg-white/90 rounded-md md:col-span-3 backdrop-blur-md h-1000'}>
+            <div className={'bg-white/90 rounded-md md:col-span-3 backdrop-blur-md overflow-y-auto p-5'}>
 
             </div>
         </PageLayout>
