@@ -13,6 +13,7 @@ type RegisterForm = {
     email: string;
     password: string;
     password_confirmation: string;
+    birth_date: string;
 };
 
 export default function Register() {
@@ -21,6 +22,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        birth_date: '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -98,6 +100,17 @@ export default function Register() {
                             placeholder="Confirm password"
                         />
                         <InputError message={errors.password_confirmation} />
+                    </div>
+                    <div className={"grid gap-2"}>
+                        <Label htmlFor={"birth_date"}>Date de naissance</Label>
+                        <Input
+                            id="birth_date"
+                            type="date"
+                            required
+                            value={data.birth_date}
+                            onChange={(e) => {setData("birth_date", e.target.value)}}
+                        />
+                        <InputError message={errors.birth_date} />
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>

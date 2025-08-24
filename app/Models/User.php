@@ -1,6 +1,6 @@
-<?php
+<?php /** @noinspection PhpUndefinedFunctionInspection */
 
-namespace App\Models;
+    namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
@@ -29,6 +29,7 @@ class User extends Authenticatable
         'slug',
         'email',
         'password',
+        'birth_date'
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 
@@ -58,6 +60,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    /** @noinspection PhpParamsInspection */
     protected static function booted(): void
     {
         static::creating(function (User $user) {
@@ -92,7 +96,7 @@ class User extends Authenticatable
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class, 'group_members');
     }
 
     public function posts(): HasMany {

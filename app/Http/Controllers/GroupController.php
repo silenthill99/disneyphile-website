@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -12,7 +13,7 @@ class GroupController extends Controller
     public function index()
     {
         $groups = Group::with(["owner", "groupMembers"])->paginate(10);
-        return Inertia::render("groups/index", compact("groups"));
+        return Inertia::render("groups/index", $this->compact("groups"));
     }
 
     public function store(Request $request)
@@ -59,4 +60,11 @@ class GroupController extends Controller
     public function create() {
         return Inertia::render("groups/create");
     }
+
+    public function user_groups(User $user)
+    {
+        $groups = $user->groups();
+        return Inertia::render("groups/user_groups", compact("groups"));
+    }
+
 }
