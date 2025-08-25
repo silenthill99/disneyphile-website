@@ -1,9 +1,13 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
 
-namespace App\Http\Controllers;
+    /** @noinspection PhpUndefinedFunctionInspection */
+
+    namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class PostController extends Controller
 {
@@ -18,7 +22,15 @@ class PostController extends Controller
 
         ]);
 
-        return Post::create($data);
+        $post = Auth::user()->posts()->create($data);
+
+        foreach ($request->file('image') as $image) {
+            $imageName = time()."_".$image->getClientOriginalName();
+            $imagePath = $image->storeAs('images', $imageName, 'public');
+            $post->post_image()->create((array)'image_path', $imagePath);
+        }
+
+        return Redirect::back();
     }
 
     public function show(Post $post)

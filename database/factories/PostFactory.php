@@ -1,6 +1,6 @@
-<?php
+<?php /** @noinspection PhpUndefinedFunctionInspection */
 
-namespace Database\Factories;
+    namespace Database\Factories;
 
 use App\Models\Group;
 use App\Models\Post;
@@ -18,7 +18,6 @@ class PostFactory extends Factory
             "user_id" => User::factory(),
             'group_id' => Group::factory(),
             'content' => fake()->realText(),
-            'image_path' => $this->faker->imageUrl(),
             'visibility' => fake()->randomElement(['public', 'private']),
             'created_at' => now(),
             'updated_at' => now(),

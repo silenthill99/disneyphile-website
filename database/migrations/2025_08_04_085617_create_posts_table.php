@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Group::class)->nullable()->constrained()->cascadeOnDelete();
             $table->text('content');
-            $table->string("image_path")->nullable();
             $table->enum("visibility", ["public", "group","private"])->default("public");
             $table->timestamps();
         });

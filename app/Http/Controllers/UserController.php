@@ -18,7 +18,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $tags = $user->tags;
-        $posts = $user->posts();
+        $posts = $user->posts()->with(['user', 'group', 'post_image'])->latest()->get();
         return Inertia::render('members/show', [
             "user" => $user,
             "tags" => $tags,

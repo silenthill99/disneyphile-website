@@ -101,7 +101,7 @@ export default function Welcome() {
                                             </>
                                         )}
                                     </div>
-                                    <p className={"text-gray-400"}>Le {new Date().toLocaleDateString(navigator.language, {
+                                    <p className={"text-gray-400 text-xs"}>Le {new Date().toLocaleDateString(navigator.language, {
                                         year: 'numeric',
                                         month: 'long',
                                         day: 'numeric'
