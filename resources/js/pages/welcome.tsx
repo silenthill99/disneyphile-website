@@ -46,7 +46,7 @@ export default function Welcome() {
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
-                    <AvatarImage src={auth.user.image_profile ? `/storage/${auth.user.image_profile}` : '/assets/immages/logo.svg'} className={auth.user.image_profile ? 'object-cover' : 'bg-gray-200'} />
+                    <AvatarImage src={auth.user.image_profile ? `/storage/${auth.user.image_profile}` : '/assets/images/logo.svg'} className={auth.user.image_profile ? 'object-cover' : 'bg-gray-200'} />
                     <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
