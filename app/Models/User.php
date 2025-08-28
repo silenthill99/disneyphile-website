@@ -61,7 +61,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    /** @noinspection PhpParamsInspection */
     protected static function booted(): void
     {
         static::creating(function (User $user) {
@@ -72,10 +71,9 @@ class User extends Authenticatable
             while (User::where('slug', $user->slug)->exists()) {
                 $user->slug = $originalSlug . '-' . $counter;
             }
-
-            if (is_null($user->role_id)) {
-                $user->role_id = Role::where('name', 'Guest')->firstOrFail()->id;
-            }
+//            if (is_null($user->role_id)) {
+//                $user->role_id = Role::where('name', 'Guest')->firstOrFail()->id;
+//            }
         });
     }
 

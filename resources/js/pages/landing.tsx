@@ -42,7 +42,7 @@ const Landing = () => {
 
     function registerSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        postRegister(route('register'))
+        postRegister(route('register.store'))
     }
 
     return (

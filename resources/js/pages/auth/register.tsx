@@ -27,13 +27,13 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('register'), {
+        post("/register", {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
 
     return (
-        <div className={"min-h-screen bg-[url('disneyland-486098.jpg')] bg-cover bg-center bg-fixed flex items-center justify-center"}>
+        <div className={"min-h-screen bg-[url('/disneyland-486098.jpg')] bg-cover bg-center bg-fixed flex items-center justify-center"}>
             <Head title="Register" />
             <form className="flex flex-col gap-6 bg-white w-100 p-5 rounded-4xl" onSubmit={submit}>
                 <div className="grid gap-6">
