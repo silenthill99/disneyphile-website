@@ -45,12 +45,14 @@ class RegisteredUserController extends Controller
             return "Il faut avoir au minimum 13 ans pour accéder à nos services !";
         }
 
+        $role = Role::firstOrCreate(['name' => "Guest"]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'birth_date' => $request->birth_date,
-            'role_id' => Role::find(1)->id
+            'role_id' => $role->id
         ]);
 
         event(new Registered($user));
