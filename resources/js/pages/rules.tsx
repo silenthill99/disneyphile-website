@@ -24,7 +24,7 @@ const Rules = () => {
                     </p>
                     <div>
                         <h1 className={'font-bold text-4xl/17.5 mb-6'}>Article 1 - Comptes</h1>
-                        <ol>
+                        <ul>
                             <li className={"mb-6"}>
                                 <span className={'text-2xl/12.5 font-semibold'}>1.1 Age minimum</span>
                                 <p className={"text-lg/10"}>Afin de garantir un minimum de sécurité, l'age recquis pour avoir accès à un compte sur notre plateforme est de 13 ans minimum.</p>
@@ -33,7 +33,7 @@ const Rules = () => {
                                 <span className={'text-2xl/12.5 font-semibold'}>1.2 Pseudo et photo de profil</span>
                                 <p className={"text-lg/10"}>Toutes photos de profil et pseudos à caractères pornographique, politique, terroriste ou religieux sont à proscrire</p>
                             </li>
-                        </ol>
+                        </ul>
                     </div>
                 </div>
             </main>
