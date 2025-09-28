@@ -3,6 +3,7 @@ import PageLayout from '@/layouts/page-layout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { User } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 type Group = {
     id: number,
@@ -53,11 +54,11 @@ const Index = () => {
                     className={'font-semibold'}>{groups.to}</span> sur {groups.total}</p>
                 <div className="flex flex-wrap gap-1">
                     {groups.links.map((link, index) => (
-                        <button
+                        <Button
                             key={index}
-                            disabled={!link.url}
+                            variant={"link"}
+                            disabled={!link.url || link.active}
                             onClick={() => link.url && router.visit(link.url)}
-                            className={`rounded border px-2 py-1 ${link.active ? 'bg-blue-200 font-bold' : 'bg-white'}`}
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />
                     ))}

@@ -13,7 +13,7 @@ class GroupController extends Controller
     public function index()
     {
         $groups = Group::with(["owner", "groupMembers"])->paginate(10);
-        return Inertia::render("groups/index", $this->compact("groups"));
+        return Inertia::render("groups/index", compact("groups"));
     }
 
     public function store(Request $request)
@@ -59,12 +59,6 @@ class GroupController extends Controller
 
     public function create() {
         return Inertia::render("groups/create");
-    }
-
-    public function user_groups(User $user)
-    {
-        $groups = $user->groups();
-        return Inertia::render("groups/user_groups", compact("groups"));
     }
 
 }
