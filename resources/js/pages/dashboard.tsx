@@ -4,6 +4,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Carousel } from 'flowbite-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

@@ -1,33 +1,37 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
-import { SharedData, User } from '@/types';
+import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Create from '@/components/articles/create';
 import { useInitials } from '@/hooks/use-initials';
 import RightArrow from '@/components/right-arrow';
-
-type Group = {
-    user: User,
-    name: string,
-    description: string,
-    bannier?: string | null,
-    private: boolean
-}
-
-type Post = {
-    id: number,
-    user: User,
-    group?: Group | null,
-    content: string,
-    image_path?: string | null,
-    visibility: boolean,
-    created_at: string
-}
+import { Posts } from '@/types/posts';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Welcome() {
-    const {auth, posts} = usePage<SharedData & {posts: Post[]}>().props;
+    const {auth, posts} = usePage<SharedData & {posts: Posts[]}>().props;
+
+    const [postData, setPostData] = useState(posts)
+
+    const handleLike = async (postId: number) => {
+        setPostData(prevPost =>
+            prevPost.map(post =>
+                post.id === postId
+                    ? {...post, likes: post.likes + 1}
+                    : post
+            )
+        );
+        try {
+            await axios.post(route('like', postId))
+        } catch (e) {
+            setPostData(posts)
+            console.error("Erreur : " +e)
+        }
+    }
 
     const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
     const rejex = /https?:\/\/\S+/g;
@@ -80,7 +84,7 @@ export default function Welcome() {
                     </DialogContent>
                 </Dialog>
                 <div className={'my-20 space-y-5'}>
-                    {posts.map((p) => (
+                    {postData.map((p) => (
                         <div key={p.id}>
                             <div className={'rounded bg-white p-5 space-y-5'}>
                                 <div className={"flex items-center justify-between"}>
@@ -107,6 +111,7 @@ export default function Welcome() {
                                         day: 'numeric'
                                     })}</p></div>
                                 <p>{p.content}</p>
+                                <Button variant={"ghost"} onClick={() => handleLike(p.id)}>J'aime {p.likes}</Button>
                             </div>
                         </div>
                     ))}

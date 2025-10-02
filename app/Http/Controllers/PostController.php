@@ -55,4 +55,12 @@ class PostController extends Controller
 
         return response()->json();
     }
+
+    public function like(Post $post)
+    {
+        $post->increment('likes');
+        return response()->json(
+            ['likes' => $post->likes]
+        );
+    }
 }

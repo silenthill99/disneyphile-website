@@ -50,6 +50,7 @@
         "concurrently": "^9.2.1",
         "date-fns": "^4.1.0",
         "dompurify": "^3.2.7",
+        "embla-carousel-react": "^8.6.0",
         "flowbite-react": "^0.12.9",
         "globals": "^16.4.0",
         "laravel-vite-plugin": "^2.0",

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
@@ -50,6 +51,7 @@ Route::middleware(GuestToLanding::class)->group(function () {
     Route::post("/", function () {
         return Inertia::render('welcome');
     })->name('search');
+    Route::post("/{post}/like", [PostController::class, "like"])->name('like');
 });
 
 Route::get("/landing", function () {
