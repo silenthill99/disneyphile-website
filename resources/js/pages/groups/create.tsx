@@ -35,7 +35,7 @@ const Create = () => {
 
     const [preview, setPreview] = useState<string | null>(null);
     return (
-        <PageLayout className={"container mx-auto bg-white p-5 rounded my-20"}>
+        <PageLayout className={"container mx-auto bg-white p-5 rounded my-20 overflow-y-auto"}>
             <form onSubmit={handleSubmit}>
                 <Label>Nom du groupe</Label>
                 <Input

@@ -7,5 +7,6 @@ export type Groups ={
     description: string,
     bannier? : string,
     created_at: string,
-    updated_at: string
+    updated_at: string,
+    slug: string
 }

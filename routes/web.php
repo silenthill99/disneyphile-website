@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/** @noinspection PhpParamsInspection */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -39,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/groups/create", [GroupController::class, "create"])->name("groups.create");
     Route::get('/groups', [GroupController::class, "index"])->name("groups");
     Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
+    Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
 });
 
 Route::middleware(GuestToLanding::class)->group(function () {

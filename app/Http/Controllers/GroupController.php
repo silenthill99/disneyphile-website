@@ -25,9 +25,12 @@ class GroupController extends Controller
             'description' => "required|string"
         ]);
 
-        $imageFile = $request->file('banniere');
-        $imageName = time() . "_" . $imageFile->getClientOriginalName();
-        $data["bannier"] = "/storage/".$imageFile->storeAs("images", $imageName, "public");
+        if($request->hasFile("banniere"))
+        {
+            $imageFile = $request->file('banniere');
+            $imageName = time() . "_" . $imageFile->getClientOriginalName();
+            $data["bannier"] = "/storage/".$imageFile->storeAs("images", $imageName, "public");
+        }
 
         Auth::user()->createdGroups()->create($data);
 
@@ -36,7 +39,8 @@ class GroupController extends Controller
 
     public function show(Group $group)
     {
-        return $group;
+        $group->load(["owner", "groupMembers", "posts"]);
+        return Inertia::render("groups/show", compact("group"));
     }
 
     public function update(Request $request, Group $group)
