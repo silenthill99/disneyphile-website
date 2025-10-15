@@ -4,7 +4,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle, Carousel } from 'flowbite-react';
+import { updateProfile } from '@/routes';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,7 +27,7 @@ export default function Dashboard() {
 
     function handleChange(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        post(route("update-profile", auth.user.slug), {
+        post(updateProfile({slug: auth.user.slug}).url, {
             onSuccess: () => reset()
         })
     }

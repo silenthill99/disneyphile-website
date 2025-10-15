@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Posts } from '@/types/posts';
 import { Tags } from '@/types/tags';
+import { dashboard } from '@/routes';
 
 
 
@@ -28,7 +29,7 @@ const Show = () => {
                 <div className={"text-center"}>
                     <h2 className={'text-2xl font-semibold'}>{user.name}</h2>
                     {can.view && (
-                        <Link href={route('dashboard')} className={"block mt-2 text-sm text-blue-600 hover:underline"}>Accéder à mon tableau de bord</Link>
+                        <Link href={dashboard()} className={"block mt-2 text-sm text-blue-600 hover:underline"}>Accéder à mon tableau de bord</Link>
                     )}
                     <Link className={"block mt-1 text-sm text-blue-600 hover:underline"} href={"#"}>Groupes</Link>
                 </div>

@@ -7,6 +7,8 @@ import { useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import InfosCGU from '@/components/infos-cgu';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import login from '@/routes/login';
+import register from '@/routes/register';
 
 type LoginProps = {
     email: string;
@@ -37,12 +39,12 @@ const Landing = () => {
 
     function loginSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        postLogin(route('login.store'))
+        postLogin(login.store().url)
     }
 
     function registerSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        postRegister(route('register.store'))
+        postRegister(register.store().url)
     }
 
     return (

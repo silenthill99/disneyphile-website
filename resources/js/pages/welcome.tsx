@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
 import { SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +11,9 @@ import { Posts } from '@/types/posts';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import axios from 'axios';
+import { like } from '@/routes';
+import groups from '@/routes/groups';
+import members from '@/routes/members';
 
 export default function Welcome() {
     const {auth, posts} = usePage<SharedData & {posts: Posts[]}>().props;
@@ -26,7 +29,7 @@ export default function Welcome() {
             )
         );
         try {
-            await axios.post(route('like', postId))
+            await axios.post(like({id: postId}).url)
         } catch (e) {
             setPostData(posts)
             console.error("Erreur : " +e)
@@ -57,12 +60,12 @@ export default function Welcome() {
                 <nav>
                     <ul className={'space-y-2'}>
                         <li>
-                            <Link href={route('members.index')} className={'hover:underline'}>
+                            <Link href={members.index()} className={'hover:underline'}>
                                 Liste des membres
                             </Link>
                         </li>
                         <li>
-                            <Link href={route('groups')} className={'hover:underline'}>
+                            <Link href={groups.index()} className={'hover:underline'}>
                                 Liste des groupes
                             </Link>
                         </li>
@@ -89,7 +92,7 @@ export default function Welcome() {
                             <div className={'rounded bg-white p-5 space-y-5'}>
                                 <div className={"flex items-center justify-between"}>
                                     <div className={'flex items-center gap-5'}>
-                                        <Link href={route('members.show', p.user.slug)}
+                                        <Link href={members.show({slug: p.user.slug})}
                                               className={'flex items-center gap-5'}>
                                             <Avatar>
                                                 <AvatarImage src={'/storage/' + p.user.image_profile}
@@ -101,7 +104,7 @@ export default function Welcome() {
                                         {p.group && (
                                             <>
                                                 <RightArrow className={'w-5 h-5'} />
-                                                <Link href={route('groups.create')}>{p.group.name}</Link>
+                                                <Link href={groups.create()}>{p.group.name}</Link>
                                             </>
                                         )}
                                     </div>

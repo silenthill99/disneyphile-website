@@ -5,6 +5,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { Button } from '@/components/ui/button';
+import tags from '@/routes/tags';
 
 type Tags = {
     id: number;
@@ -25,7 +26,7 @@ const TagRow = ({user, tags_all}: Props) => {
         e.preventDefault();
         if (!data.tag) return;
 
-        post(route('tags.attach', { user: user.slug, tag: data.tag }), {
+        post(tags.attach({ user: user.slug, tag: parseInt(data.tag) }).url, {
             onSuccess: () => reset()
         });
     };

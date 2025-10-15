@@ -5,6 +5,8 @@ import { SharedData } from '@/types';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { FormEvent } from 'react';
 import Mailbox from '@/components/mailbox';
+import { dashboard, home, login, logout, search } from '@/routes';
+import members from '@/routes/members';
 
 type LoginProps = {
     email: string;
@@ -25,15 +27,15 @@ const Header = () => {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        searchPost(route('search'));
+        searchPost(search().url);
     }
 
     function handleLogin(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        postLoginData(route('login'), {
+        postLoginData(login().url, {
             onSuccess: () => {},
             onError: () => {
-                window.location.href = route('login');
+                window.location.href = login().url;
             },
         });
     }
@@ -43,7 +45,7 @@ const Header = () => {
     return (
         <header className={'sticky top-0 z-50 min-h-5 bg-blue-400 shadow'}>
             <div className={'container mx-auto py-2 px-5 md:px-0 flex items-center justify-between'}>
-                <Link href={route('home')}>
+                <Link href={home()}>
                     <AppLogoIcon className={'h-auto w-10 text-white'} />
                 </Link>
                 <form className={'space-x-2 hidden md:block'} onSubmit={handleSubmit}>
@@ -55,13 +57,13 @@ const Header = () => {
                         <nav className={"hidden md:block text-white"}>
                             <ul className={"flex gap-2"}>
                                 <li>
-                                    <Link href={route("dashboard")} className={"underline decoration-transparent hover:decoration-white duration-200"}>Tableau de bord</Link>
+                                    <Link href={dashboard()} className={"underline decoration-transparent hover:decoration-white duration-200"}>Tableau de bord</Link>
                                 </li>
                                 <li>
-                                    <Link href={route("members.show", auth.user.slug)} className={"underline decoration-transparent hover:decoration-white duration-200"}>Profil</Link>
+                                    <Link href={members.show({slug: auth.user.slug})} className={"underline decoration-transparent hover:decoration-white duration-200"}>Profil</Link>
                                 </li>
                                 <li>
-                                    <Link href={route("logout")} className={"underline decoration-transparent hover:decoration-white duration-200 cursor-pointer"} method={"post"}>Se déconnecter</Link>
+                                    <Link href={logout()} className={"underline decoration-transparent hover:decoration-white duration-200 cursor-pointer"} method={"post"}>Se déconnecter</Link>
                                 </li>
                             </ul>
                         </nav>
@@ -70,13 +72,13 @@ const Header = () => {
                                 <DropdownMenuTrigger className={'rounded bg-white p-1'}>Menu</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={route('dashboard')}>Tableau de bord</Link>
+                                        <Link href={dashboard()}>Tableau de bord</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={route('members.show', auth.user.slug)}>Mon profil</Link>
+                                        <Link href={members.show({slug: auth.user.slug})}>Mon profil</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={route('logout')} method={'post'} className={'cursor-pointer'}>
+                                        <Link href={logout()} method={'post'} className={'cursor-pointer'}>
                                             Se déconnecter
                                         </Link>
                                     </DropdownMenuItem>

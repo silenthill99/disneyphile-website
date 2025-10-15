@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name("update-profile");
 
     Route::get("/groups/create", [GroupController::class, "create"])->name("groups.create");
-    Route::get('/groups', [GroupController::class, "index"])->name("groups");
+    Route::get('/groups', [GroupController::class, "index"])->name("groups.index");
     Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
 });

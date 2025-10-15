@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import PageLayout from '@/layouts/page-layout';
 import { Textarea } from '@/components/ui/textarea';
+import groups from '@/routes/groups';
 
 type FormProps = {
     name: string;
@@ -28,7 +29,7 @@ const Create = () => {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        post(route('groups.store'), {
+        post(groups.store().url, {
             onSuccess: () => reset()
         })
     }

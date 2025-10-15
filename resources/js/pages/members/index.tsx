@@ -3,6 +3,7 @@ import PageLayout from '@/layouts/page-layout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { User } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import members from '@/routes/members';
 
 
 const Index = () => {
@@ -22,7 +23,7 @@ const Index = () => {
                     {users.map((user) => (
                        <TableRow key={user.id}>
                            <TableCell>{user.name}</TableCell>
-                           <TableCell><Link href={route('members.show', user.slug)}>Voir le profil</Link></TableCell>
+                           <TableCell><Link href={members.show({slug: user.slug})}>Voir le profil</Link></TableCell>
                        </TableRow>
                     ))}
                 </TableBody>

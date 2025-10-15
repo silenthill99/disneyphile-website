@@ -5,9 +5,10 @@ import { PaginatedProps } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Groups } from '@/types/groups';
+import groups from '@/routes/groups';
 
 type Props = {
-    groups: PaginatedProps<Groups>
+    groupList: PaginatedProps<Groups>
 }
 
 
@@ -61,16 +62,16 @@ const generatePaginationItems = (links: PaginatedProps<Groups>['links'], current
 };
 
 const Index = () => {
-    const { groups } = usePage<Props>().props;
+    const { groupList } = usePage<Props>().props;
 
     return (
         <PageLayout className={'container mx-auto my-5 rounded-2xl bg-white/80 backdrop-blur-md p-3 overflow-y-auto'}>
             <h1>Liste des groupes</h1>
-            <Link href={route("groups.create")} className={"text-blue-500 hover:text-purple-500 hover:underline"}>Créer un groupe</Link><br/><br/>
+            <Link href={groups.create()} className={"text-blue-500 hover:text-purple-500 hover:underline"}>Créer un groupe</Link><br/><br/>
 
             <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
-                {groups.data.map(group => (
-                    <Link href={route("groups.show", group.slug)} key={group.id}>
+                {groupList.data.map(group => (
+                    <Link href={groups.show({slug: group.slug})} key={group.id}>
                         <Card className={"overflow-hidden"}>
                             <CardHeader>
                                 <img src={group.bannier ? group.bannier : "/assets/images/background.jpg"} alt={"Bannière"}/>
@@ -84,19 +85,19 @@ const Index = () => {
                 ))}
             </div>
 
-            {groups.links.length > 1 && (
+            {groupList.links.length > 1 && (
                 <div className={'flex items-center justify-between mt-6'}>
                     <p>
-                        {groups.from !== null && groups.to !== null ? (
+                        {groupList.from !== null && groupList.to !== null ? (
                             <>
-                                Affichage des résultats <span className={'font-semibold'}>{groups.from}</span> à <span className={'font-semibold'}>{groups.to}</span> sur {groups.total}
+                                Affichage des résultats <span className={'font-semibold'}>{groupList.from}</span> à <span className={'font-semibold'}>{groupList.to}</span> sur {groupList.total}
                             </>
                         ) : (
-                            `${groups.total} résultats`
+                            `${groupList.total} résultats`
                         )}
                     </p>
                     <div className={"flex flex-wrap gap-1"}>
-                        {generatePaginationItems(groups.links, groups.current_page, groups.last_page).map((link, index) => (
+                        {generatePaginationItems(groupList.links, groupList.current_page, groupList.last_page).map((link, index) => (
                             <Button
                                 key={index}
                                 variant="link"

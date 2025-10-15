@@ -7,6 +7,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components
 import { User } from '@/types';
 import { Button } from '@/components/ui/button';
 import TagRow from '@/components/tag-row';
+import tags from '@/routes/tags';
 
 type Tags = {
     id: number;
@@ -43,7 +44,7 @@ const Tags = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route('tags.store'), {
+        post(tags.store().url, {
             onSuccess: () => reset()
         });
     };

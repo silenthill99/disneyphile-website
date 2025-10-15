@@ -6,6 +6,7 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
+import { home } from '@/routes';
 
 const mainNavItems: NavItem[] = [
     {
@@ -26,7 +27,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={route('home')} prefetch>
+                            <Link href={home()} prefetch>
                                 <AppLogo/>
                             </Link>
                         </SidebarMenuButton>
