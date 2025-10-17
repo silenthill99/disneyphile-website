@@ -12,8 +12,8 @@ class GroupController extends Controller
 {
     public function index()
     {
-        $groups = Group::with(["owner", "groupMembers"])->paginate(10);
-        return Inertia::render("groups/index", compact("groups"));
+        $groupList = Group::with(["owner", "groupMembers"])->paginate(10);
+        return Inertia::render("groups/index", compact("groupList"));
     }
 
     public function store(Request $request)

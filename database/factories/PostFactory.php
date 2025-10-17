@@ -16,7 +16,7 @@ class PostFactory extends Factory
     {
         return [
             "user_id" => User::factory(),
-            'group_id' => Group::factory(),
+            'group_id' => null,
             'content' => fake()->realText(),
             'visibility' => fake()->randomElement(['public', 'private']),
             'created_at' => now(),

@@ -1,11 +1,12 @@
 import React, { FormEvent } from 'react';
 import { User } from '@/types';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { Button } from '@/components/ui/button';
 import tags from '@/routes/tags';
+import { CloseIcon } from 'flowbite-react';
 
 type Tags = {
     id: number;
@@ -30,12 +31,20 @@ const TagRow = ({user, tags_all}: Props) => {
             onSuccess: () => reset()
         });
     };
+    const handleClick = (tag: Tags) => {
+        if(confirm("Voulez-vous retirer ce tag ?")) {
+            router.post(tags.detach({user: user.slug, tag: tag.id }).url)
+        }
+    }
     return (
         <TableRow>
             <TableCell>{user.name}</TableCell>
             <TableCell>
                 {user.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary">{tag.name}</Badge>
+                    <Badge key={index} variant="secondary">
+                        {tag.name}
+                        <button onClick={() => handleClick(tag)}><CloseIcon/></button>
+                    </Badge>
                 ))}
             </TableCell>
             <TableCell>

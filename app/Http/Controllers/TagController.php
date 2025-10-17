@@ -57,4 +57,9 @@ class TagController extends Controller
         $user->tags()->attach($tag);
         return \redirect()->back();
     }
+
+    public function removeTagUser(User $user, Tag $tag) {
+        $user->tags()->detach($tag);
+        return \redirect()->back();
+    }
 }

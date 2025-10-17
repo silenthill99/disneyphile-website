@@ -12,54 +12,54 @@ type Props = {
 }
 
 
-const generatePaginationItems = (links: PaginatedProps<Groups>['links'], currentPage: number, lastPage: number) => {
-    const items = [];
-    const prevLink = links[0];
-    const nextLink = links[links.length - 1];
-
-    // Bouton Précédent
-    if (prevLink && prevLink.label.includes('Previous')) {
-        items.push({
-            ...prevLink,
-            label: '« Précédent',
-            isPrevNext: true
-        });
-    }
-
-    // Logique d'ellipses
-    const delta = 2; // Nombre de pages à afficher de chaque côté de la page courante
-    const left = currentPage - delta;
-    const right = currentPage + delta + 1;
-
-    for (let i = 1; i <= lastPage; i++) {
-        if (i === 1 || i === lastPage || (i >= left && i < right)) {
-            items.push({
-                url: links.find(link => link.label === i.toString())?.url || null,
-                label: i.toString(),
-                active: i === currentPage,
-                isPage: true
-            });
-        } else if (items[items.length - 1]?.label !== '...') {
-            items.push({
-                url: null,
-                label: '...',
-                active: false,
-                isEllipsis: true
-            });
-        }
-    }
-
-    // Bouton Suivant
-    if (nextLink && nextLink.label.includes('Next')) {
-        items.push({
-            ...nextLink,
-            label: 'Suivant »',
-            isPrevNext: true
-        });
-    }
-
-    return items;
-};
+// const generatePaginationItems = (links: PaginatedProps<Groups>['links'], currentPage: number, lastPage: number) => {
+//     const items = [];
+//     const prevLink = links[0];
+//     const nextLink = links[links.length - 1];
+//
+//     // Bouton Précédent
+//     if (prevLink && prevLink.label.includes('Previous')) {
+//         items.push({
+//             ...prevLink,
+//             label: '« Précédent',
+//             isPrevNext: true
+//         });
+//     }
+//
+//     // Logique d'ellipses
+//     const delta = 2; // Nombre de pages à afficher de chaque côté de la page courante
+//     const left = currentPage - delta;
+//     const right = currentPage + delta + 1;
+//
+//     for (let i = 1; i <= lastPage; i++) {
+//         if (i === 1 || i === lastPage || (i >= left && i < right)) {
+//             items.push({
+//                 url: links.find(link => link.label === i.toString())?.url || null,
+//                 label: i.toString(),
+//                 active: i === currentPage,
+//                 isPage: true
+//             });
+//         } else if (items[items.length - 1]?.label !== '...') {
+//             items.push({
+//                 url: null,
+//                 label: '...',
+//                 active: false,
+//                 isEllipsis: true
+//             });
+//         }
+//     }
+//
+//     // Bouton Suivant
+//     if (nextLink && nextLink.label.includes('Next')) {
+//         items.push({
+//             ...nextLink,
+//             label: 'Suivant »',
+//             isPrevNext: true
+//         });
+//     }
+//
+//     return items;
+// };
 
 const Index = () => {
     const { groupList } = usePage<Props>().props;
@@ -97,15 +97,24 @@ const Index = () => {
                         )}
                     </p>
                     <div className={"flex flex-wrap gap-1"}>
-                        {generatePaginationItems(groupList.links, groupList.current_page, groupList.last_page).map((link, index) => (
+                        {/*{generatePaginationItems(groupList.links, groupList.current_page, groupList.last_page).map((link, index) => (*/}
+                        {/*    <Button*/}
+                        {/*        key={index}*/}
+                        {/*        variant="link"*/}
+                        {/*        disabled={!link.url || link.active || link.isEllipsis}*/}
+                        {/*        onClick={() => link.url && router.visit(link.url)}*/}
+                        {/*    >*/}
+                        {/*        {link.label}*/}
+                        {/*    </Button>*/}
+                        {/*))}*/}
+                        {groupList.links.map((group, index) => (
                             <Button
                                 key={index}
-                                variant="link"
-                                disabled={!link.url || link.active || link.isEllipsis}
-                                onClick={() => link.url && router.visit(link.url)}
-                            >
-                                {link.label}
-                            </Button>
+                                variant={"link"}
+                                disabled={!group.url || group.active}
+                                onClick={() => group.url && router.visit(group.url)}
+                                dangerouslySetInnerHTML={{__html: group.label}}
+                            />
                         ))}
                     </div>
                 </div>

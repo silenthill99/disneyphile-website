@@ -4,41 +4,26 @@ import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { User } from '@/types';
+import { PaginatedProps, SharedData, User } from '@/types';
 import { Button } from '@/components/ui/button';
 import TagRow from '@/components/tag-row';
 import tags from '@/routes/tags';
-
-type Tags = {
-    id: number;
-    name: string;
-}
+import { Tag } from '@/types/tags';
 
 type TagsForm = {
     name: string;
 }
 
-type FlashProps = {
-    success?: string
-}
-
-type PaginatedUsers<T> = {
-    data: T[],
-    links: {
-        url: string | null,
-        label: string,
-        active: boolean
-    }[]
-}
 const Tags = () => {
     const { data, setData, post, reset } = useForm<Required<TagsForm>>({
         name: ''
     });
 
-    const { flash, users, tags_all } = usePage<{
-        flash: FlashProps,
-        users: PaginatedUsers<User & {tags: Tags[]}>,
-        tags_all: Tags[]
+    const {flash} = usePage<SharedData>().props;
+
+    const { users, tags_all } = usePage<{
+        users: PaginatedProps<User & {tags: Tag[]}>,
+        tags_all: Tag[]
     }>().props;
 
 
