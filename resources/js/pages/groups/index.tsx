@@ -69,55 +69,61 @@ const Index = () => {
             <h1>Liste des groupes</h1>
             <Link href={groups.create()} className={"text-blue-500 hover:text-purple-500 hover:underline"}>Créer un groupe</Link><br/><br/>
 
-            <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
-                {groupList.data.map(group => (
-                    <Link href={groups.show({slug: group.slug})} key={group.id}>
-                        <Card className={"overflow-hidden"}>
-                            <CardHeader>
-                                <img src={group.bannier ? group.bannier : "/assets/images/background.jpg"} alt={"Bannière"}/>
-                                <CardTitle>{group.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                ))}
-            </div>
-
-            {groupList.links.length > 1 && (
-                <div className={'flex items-center justify-between mt-6'}>
-                    <p>
-                        {groupList.from !== null && groupList.to !== null ? (
-                            <>
-                                Affichage des résultats <span className={'font-semibold'}>{groupList.from}</span> à <span className={'font-semibold'}>{groupList.to}</span> sur {groupList.total}
-                            </>
-                        ) : (
-                            `${groupList.total} résultats`
-                        )}
-                    </p>
-                    <div className={"flex flex-wrap gap-1"}>
-                        {/*{generatePaginationItems(groupList.links, groupList.current_page, groupList.last_page).map((link, index) => (*/}
-                        {/*    <Button*/}
-                        {/*        key={index}*/}
-                        {/*        variant="link"*/}
-                        {/*        disabled={!link.url || link.active || link.isEllipsis}*/}
-                        {/*        onClick={() => link.url && router.visit(link.url)}*/}
-                        {/*    >*/}
-                        {/*        {link.label}*/}
-                        {/*    </Button>*/}
-                        {/*))}*/}
-                        {groupList.links.map((group, index) => (
-                            <Button
-                                key={index}
-                                variant={"link"}
-                                disabled={!group.url || group.active}
-                                onClick={() => group.url && router.visit(group.url)}
-                                dangerouslySetInnerHTML={{__html: group.label}}
-                            />
+            {groupList.data.length > 0 ? (
+                <>
+                    <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
+                        {groupList.data.map(group => (
+                            <Link href={groups.show({ slug: group.slug })} key={group.id}>
+                                <Card className={'overflow-hidden'}>
+                                    <CardHeader>
+                                        <img src={group.bannier ? group.bannier : '/assets/images/background.jpg'}
+                                             alt={'Bannière'} />
+                                        <CardTitle>{group.name}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
+                                    </CardContent>
+                                </Card>
+                            </Link>
                         ))}
                     </div>
-                </div>
+                    {groupList.links.length > 1 && (
+                        <div className={'flex items-center justify-between mt-6'}>
+                            <p>
+                                {groupList.from !== null && groupList.to !== null ? (
+                                    <>
+                                        Affichage des résultats <span className={'font-semibold'}>{groupList.from}</span> à <span className={'font-semibold'}>{groupList.to}</span> sur {groupList.total}
+                                    </>
+                                ) : (
+                                    `${groupList.total} résultats`
+                                )}
+                            </p>
+                            <div className={"flex flex-wrap gap-1"}>
+                                {/*{generatePaginationItems(groupList.links, groupList.current_page, groupList.last_page).map((link, index) => (*/}
+                                {/*    <Button*/}
+                                {/*        key={index}*/}
+                                {/*        variant="link"*/}
+                                {/*        disabled={!link.url || link.active || link.isEllipsis}*/}
+                                {/*        onClick={() => link.url && router.visit(link.url)}*/}
+                                {/*    >*/}
+                                {/*        {link.label}*/}
+                                {/*    </Button>*/}
+                                {/*))}*/}
+                                {groupList.links.map((group, index) => (
+                                    <Button
+                                        key={index}
+                                        variant={"link"}
+                                        disabled={!group.url || group.active}
+                                        onClick={() => group.url && router.visit(group.url)}
+                                        dangerouslySetInnerHTML={{__html: group.label}}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <p>Aucun groupxwes actuellement</p>
             )}
         </PageLayout>
     );

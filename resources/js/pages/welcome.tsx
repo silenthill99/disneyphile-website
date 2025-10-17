@@ -45,7 +45,7 @@ export default function Welcome() {
 
     const getInitials = useInitials();
     return (
-        <PageLayout className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
+        <PageLayout parentClassName={"h-screen"} className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
             <Head title="Welcome">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
