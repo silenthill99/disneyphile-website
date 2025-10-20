@@ -1,4 +1,7 @@
 import { LucideIcon } from 'lucide-react';
+import { Tag } from '@/types/tags';
+import { Groups } from '@/types/groups';
+import { Posts } from '@/types/posts';
 
 export interface PaginatedProps<T> {
     data: T[];
@@ -18,6 +21,18 @@ export interface PaginatedProps<T> {
     prev_page_url: string | null;
     to: number | null;
     total: number;
+}
+
+export interface Page {
+    id: number,
+    owner: User,
+    title: string,
+    description?: string,
+    image_profile?: string,
+    bannier?: string,
+    created_at: string,
+    updated_at: string,
+    members: User[]
 }
 
 export interface Auth {
@@ -67,6 +82,12 @@ export interface User {
     can?: {
         admin?: boolean;
     }
+    tags: Tag[],
+    createdGroups: Groups[],
+    groups: Groups[],
+    posts: Posts[],
+    pages: Page[],
+    joinedPages: Page[],
 }
 
 export interface Role {

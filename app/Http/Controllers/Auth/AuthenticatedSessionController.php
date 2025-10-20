@@ -34,8 +34,21 @@ class AuthenticatedSessionController extends Controller
             "password" => "required",
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember');
+
+        \Log::debug('Remember value from request:', [
+            'remember' => $remember,
+            'raw_remember' => $request->input('remember'),
+            'all_request' => $request->all()
+        ]);
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
+            \Log::debug('After login - User remember_token:', [
+                'token' => Auth::user()->remember_token
+            ]);
+
             return redirect()->intended(route('home', absolute: false));
         }
 //        $request->authenticate();

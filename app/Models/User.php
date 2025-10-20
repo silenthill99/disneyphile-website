@@ -100,4 +100,14 @@ class User extends Authenticatable
     public function posts(): HasMany {
         return $this->hasMany(Post::class);
     }
+
+    public function pages(): HasMany
+    {
+        return $this->hasMany(Page::class, "owner_id");
+    }
+
+    public function joinedPages(): BelongsToMany
+    {
+        return $this->belongsToMany(Page::class, 'page_members');
+    }
 }

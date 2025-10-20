@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import PageLayout from '@/layouts/page-layout';
 import { Textarea } from '@/components/ui/textarea';
 import groups from '@/routes/groups';
+import { ImageIcon } from 'lucide-react';
 
 type FormProps = {
     name: string;
@@ -29,7 +30,8 @@ const Create = () => {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        post(groups.store().url, {
+        post(groups.store().url
+            , {
             onSuccess: () => reset()
         })
     }
@@ -48,18 +50,24 @@ const Create = () => {
                     <p className={"text-red-500"}>{errors.name}</p>
                 )}
                 <br/>
-                <Label>Bannière</Label>
-                <Input
-                    type={"file"}
-                    accept={"image/*"}
-                    onChange={e => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                            setData("banniere", file)
-                            setPreview(URL.createObjectURL(file))
-                        }
-                    }}
-                />
+                <Label htmlFor={"image"} className={"cursor-pointer group block w-fit"}>
+                    Bannière
+                    <Input
+                        id={"image"}
+                        type={"file"}
+                        accept={"image/*"}
+                        className={"hidden"}
+                        onChange={e => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                                setData("banniere", file)
+                                setPreview(URL.createObjectURL(file))
+                            }
+                        }}
+                    />
+                    <ImageIcon className={"bg-gray-300 group-hover:bg-gray-500 p-5 rounded-md mt-2"} size={75}/>
+                </Label>
+
                 {errors.banniere && (
                     <p className={"text-red-500"}>{errors.banniere}</p>
                 )}

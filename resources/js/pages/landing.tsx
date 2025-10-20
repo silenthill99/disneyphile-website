@@ -1,51 +1,19 @@
-import React, { FormEvent } from 'react';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useForm } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import InfosCGU from '@/components/infos-cgu';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import login from '@/routes/login';
 import register from '@/routes/register';
+import login from '@/routes/login';
+import { Checkbox } from '@/components/ui/checkbox';
 
-type LoginProps = {
-    email: string;
-    password: string;
-}
-
-type RegisterProps = {
-    email: string;
-    name: string;
-    password: string;
-    password_confirmation: string;
-    birth_date: string;
-}
 const Landing = () => {
 
-    const {data: loginData, setData: setLoginData, post:postLogin, processing: loginProcessing, errors: loginErrors} = useForm<Required<LoginProps>>({
-        email: "",
-        password: ""
-    })
-
-    const {data: registerData, setData: setRegisterData, post: postRegister, processing: registerProcessing, errors: registerErrors} = useForm<Required<RegisterProps>>({
-        email: "",
-        name: "",
-        password: "",
-        password_confirmation: "",
-        birth_date: ""
-    })
-
-    function loginSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        postLogin(login.store().url)
-    }
-
-    function registerSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        postRegister(register.store().url)
-    }
+    const [remember, setRemember] = useState(false)
 
     return (
         <div className={"min-h-screen bg-[url('/disneyland-486098.jpg')] bg-cover bg-fixed bg-center"}>
@@ -70,64 +38,65 @@ const Landing = () => {
                                     <CardTitle>Créer un compte</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <form onSubmit={registerSubmit}>
-                                        <Label>Adresse mail</Label>
-                                        <Input
-                                            type={'email'}
-                                            placeholder={'Votre adresse mail'}
-                                            value={registerData.email}
-                                            onChange={(e) => setRegisterData('email', e.target.value)}
-                                        />
-                                        {registerErrors.email && (
-                                            <p className={"text-red-500"}>{registerErrors.email}</p>
+                                    <Form {...register.store.form()} resetOnSuccess={true} resetOnError={['password', 'password_confirmation']}>
+                                        {({errors, processing}) => (
+                                            <>
+                                                <Label htmlFor={"email"}>Adresse mail</Label>
+                                                <Input
+                                                    type={'email'}
+                                                    placeholder={'Votre adresse mail'}
+                                                    name={"email"}
+                                                    id={"email"}
+                                                />
+                                                {errors.email && (
+                                                    <p className={"text-red-500"}>{errors.email}</p>
+                                                )}
+                                                <br />
+                                                <Label htmlFor={"name"}>Votre nom</Label>
+                                                <Input
+                                                    type={'text'}
+                                                    placeholder={'Votre nom'}
+                                                    id={"name"}
+                                                    name={"name"}
+                                                />
+                                                {errors.name && (
+                                                    <p className={"text-red-500"}>{errors.name}</p>
+                                                )}
+                                                <br />
+                                                <Label htmlFor={"password"}>Votre mot de passe</Label>
+                                                <Input
+                                                    type={'password'}
+                                                    placeholder={'Votre mot de passe'}
+                                                    id={"password"}
+                                                    name={"password"}
+                                                />
+                                                {errors.password && (
+                                                    <p className={"text-red-500"}>{errors.password}</p>
+                                                )}
+                                                <br />
+                                                <Label htmlFor={"password_confirmation"}>Confirmez votre mot de passe</Label>
+                                                <Input
+                                                    type={'password'}
+                                                    placeholder={'Confirmez votre mot de passe'}
+                                                    id={"password_confirmation"}
+                                                    name={"password_confirmation"}
+                                                />
+                                                {errors.password_confirmation && (
+                                                    <p className={"text-red-500"}>{errors.password_confirmation}</p>
+                                                )}
+                                                <br />
+                                                <Input type={"date"} name={"birth_date"} />
+                                                {errors.birth_date && (
+                                                    <p className="text-red-500">{errors.birth_date}</p>
+                                                )}
+                                                <br/>
+                                                <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
+                                                    Rejoignez la magie
+                                                    {processing && <LoaderCircle className={'animate-spin'} />}
+                                                </Button>
+                                            </>
                                         )}
-                                        <br />
-                                        <Label>Votre nom</Label>
-                                        <Input
-                                            type={'text'}
-                                            placeholder={'Votre nom'}
-                                            value={registerData.name}
-                                            onChange={(e) => setRegisterData('name', e.target.value)}
-                                        />
-                                        {registerErrors.name && (
-                                            <p className={"text-red-500"}>{registerErrors.name}</p>
-                                        )}
-                                        <br />
-                                        <Label>Votre mot de passe</Label>
-                                        <Input
-                                            type={'password'}
-                                            placeholder={'Votre mot de passe'}
-                                            value={registerData.password}
-                                            onChange={(e) => setRegisterData('password', e.target.value)}
-                                        />
-                                        {registerErrors.password && (
-                                            <p className={"text-red-500"}>{registerErrors.password}</p>
-                                        )}
-                                        <br />
-                                        <Label>Confirmez votre mot de passe</Label>
-                                        <Input
-                                            type={'password'}
-                                            placeholder={'Confirmez votre mot de passe'}
-                                            value={registerData.password_confirmation}
-                                            onChange={(e) => setRegisterData('password_confirmation', e.target.value)}
-                                        />
-                                        {registerErrors.password_confirmation && (
-                                            <p className={"text-red-500"}>{registerErrors.password_confirmation}</p>
-                                        )}
-                                        <br />
-                                        <Input type={"date"}
-                                               value={registerData.birth_date}
-                                               onChange={e => setRegisterData("birth_date", e.target.value)}
-                                        />
-                                        {registerErrors.birth_date && (
-                                            <p className="text-red-500">{registerErrors.birth_date}</p>
-                                        )}
-                                        <br/>
-                                        <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
-                                            Rejoignez la magie
-                                            {registerProcessing && <LoaderCircle className={'animate-spin'} />}
-                                        </Button>
-                                    </form>
+                                    </Form>
                                 </CardContent>
                                 <CardFooter>
                                     <InfosCGU className={'text-sm'} />
@@ -142,33 +111,42 @@ const Landing = () => {
                                     <CardTitle>Se connecter</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <form onSubmit={loginSubmit}>
-                                        <Label>Adresse mail</Label>
-                                        <Input
-                                            type={'email'}
-                                            placeholder={'Adresse mail'}
-                                            value={loginData.email}
-                                            onChange={(e) => setLoginData('email', e.target.value)}
-                                        />
-                                        {loginErrors.email && (
-                                            <p className={"text-red-500"}>{loginErrors.email}</p>
+                                    <Form {...login.store.form()} resetOnSuccess={true} resetOnError={['password']}>
+                                        {({errors, processing}) => (
+                                            <>
+                                                <Label htmlFor={"email"}>Adresse mail</Label>
+                                                <Input
+                                                    type={'email'}
+                                                    placeholder={'Adresse mail'}
+                                                    id={"email"}
+                                                    name={"email"}
+                                                />
+                                                {errors.email && (
+                                                    <p className={"text-red-500"}>{errors.email}</p>
+                                                )}
+                                                <br />
+                                                <Label htmlFor={"password"}>Mot de pase</Label>
+                                                <Input
+                                                    type={'password'}
+                                                    placeholder={'Votre mot de passe'}
+                                                    id={"password"}
+                                                    name={"password"}
+                                                />
+                                                {errors.password && (
+                                                    <p className={"text-red-500"}>{errors.password}</p>
+                                                )}
+                                                <br />
+                                                <div>
+                                                    <Checkbox id={'remember'} checked={remember} onCheckedChange={checked => setRemember(checked === true)} />
+                                                    <Label htmlFor={"remember"}>Se souvenir de moi</Label>
+                                                    <input type={"hidden"} name={"remember"} value={remember ? "1" : "0"}/>
+                                                </div>
+                                                <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
+                                                    Bon retour parmi nous ! {processing && <LoaderCircle className={'animate-spin'} />}
+                                                </Button>
+                                            </>
                                         )}
-                                        <br />
-                                        <Label>Mot de pase</Label>
-                                        <Input
-                                            type={'password'}
-                                            placeholder={'Votre mot de passe'}
-                                            value={loginData.password}
-                                            onChange={(e) => setLoginData('password', e.target.value)}
-                                        />
-                                        {loginErrors.password && (
-                                            <p className={"text-red-500"}>{loginErrors.password}</p>
-                                        )}
-                                        <br />
-                                        <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
-                                            Bon retour parmi nous ! {loginProcessing && <LoaderCircle className={'animate-spin'} />}
-                                        </Button>
-                                    </form>
+                                    </Form>
                                 </CardContent>
                                 <CardFooter>
                                     <InfosCGU className={'text-sm'} />
