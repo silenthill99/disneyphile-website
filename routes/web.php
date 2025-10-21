@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
 use App\Models\Group;
+use App\Models\Page;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
@@ -45,7 +47,8 @@ Route::middleware(GuestToLanding::class)->group(function () {
 
     Route::get('/', function () {
         $posts = Post::with("user", "group")->get();
-        return Inertia::render('welcome', compact('posts'));
+        $pageList = Page::all();
+        return Inertia::render('welcome', compact('posts', 'pageList'));
     })->name('home');
 
     Route::post("/", function () {
@@ -66,6 +69,8 @@ Route::get('/rules', function () {
 })->name('rules');
 
 Route::post("/tags/{user}/detach/{tag}", [TagController::class, "removeTagUser"])->name('tags.detach');
+
+Route::resource("pages", PageController::class);
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

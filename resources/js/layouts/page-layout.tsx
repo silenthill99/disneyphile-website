@@ -11,7 +11,7 @@ const PageLayout = ({children, className, parentClassName}: Props) => {
     return (
         <div className={cn("min-h-screen flex flex-col bg-[url('/assets/images/background.jpg')] bg-cover bg-fixed", parentClassName)}>
             <Header />
-            <main className={`flex-1 min-h-0 ${className}`}>
+            <main className={cn(`flex-1 min-h-0`, className)}>
                 {children}
             </main>
         </div>

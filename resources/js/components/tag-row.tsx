@@ -6,7 +6,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { Button } from '@/components/ui/button';
 import tags from '@/routes/tags';
-import { CloseIcon } from 'flowbite-react';
+import { ClosedCaptionIcon } from 'lucide-react';
 
 type Tags = {
     id: number;
@@ -43,7 +43,7 @@ const TagRow = ({user, tags_all}: Props) => {
                 {user.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary">
                         {tag.name}
-                        <button onClick={() => handleClick(tag)}><CloseIcon/></button>
+                        <button onClick={() => handleClick(tag)}><ClosedCaptionIcon/></button>
                     </Badge>
                 ))}
             </TableCell>

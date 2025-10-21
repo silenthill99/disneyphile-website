@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
-import { SharedData } from '@/types';
+import { Page, SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DOMPurify from 'dompurify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -14,9 +14,10 @@ import axios from 'axios';
 import { like } from '@/routes';
 import groups from '@/routes/groups';
 import members from '@/routes/members';
+import pages from '@/routes/pages';
 
 export default function Welcome() {
-    const {auth, posts} = usePage<SharedData & {posts: Posts[]}>().props;
+    const {auth, posts, pageList} = usePage<SharedData & {posts: Posts[], pageList: Page[]}>().props;
 
     const [postData, setPostData] = useState(posts)
 
@@ -53,7 +54,7 @@ export default function Welcome() {
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
-                    <AvatarImage src={auth.user.image_profile ? `/storage/${auth.user.image_profile}` : '/assets/images/logo.svg'} className={auth.user.image_profile ? 'object-cover' : 'bg-gray-200'} />
+                    <AvatarImage src={auth.user.image_profile && `/storage/${auth.user.image_profile}`} className={auth.user.image_profile && 'object-cover'} />
                     <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
@@ -67,6 +68,11 @@ export default function Welcome() {
                         <li>
                             <Link href={groups.index()} className={'hover:underline'}>
                                 Liste des groupes
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={pages.index()} className={"hover:underline"}>
+                                Liste des pages
                             </Link>
                         </li>
                     </ul>
@@ -95,8 +101,7 @@ export default function Welcome() {
                                         <Link href={members.show({slug: p.user.slug})}
                                               className={'flex items-center gap-5'}>
                                             <Avatar>
-                                                <AvatarImage src={'/storage/' + p.user.image_profile}
-                                                             className={'object-cover'} />
+                                                <AvatarImage src={p.user.image_profile && "/storage/" + p.user.image_profile} />
                                                 <AvatarFallback>{getInitials(p.user.name)}</AvatarFallback>
                                             </Avatar>
                                             <span>{p.user.name}</span>
@@ -122,14 +127,12 @@ export default function Welcome() {
             </div>
 
             {/* Panneau droit (immobile, dans le flux) */}
-            <div className="hidden h-full overflow-hidden rounded-2xl bg-white p-5 lg:block">
-                <h2 className={'py-5 text-center text-3xl'}>Suggestions</h2>
-                <div className={'flex items-center gap-2 border p-1'}>
-                    <Avatar>
-                        <AvatarFallback>DP</AvatarFallback>
-                    </Avatar>
-                    <p className={'text-sm'}>Disneyland Paris - Compte officiel</p>
-                    {/*<button className={"text-sm cursor-pointer active:bg-gray-300"}>S'abonner</button>*/}
+            <div className="hidden h-full overflow-hidden rounded-2xl bg-white p-5 lg:flex lg:flex-col">
+                <h2 className={'py-5 text-center text-3xl flex-shrink-0'}>Suggestions</h2>
+                <div className="flex-1 overflow-y-auto space-y-2">
+                    {pageList.map(page => (
+                        <Link className={"block hover:underline"} key={page.id} href={pages.show({slug: page.slug})}>{page.title}</Link>
+                    ))}
                 </div>
             </div>
         </PageLayout>

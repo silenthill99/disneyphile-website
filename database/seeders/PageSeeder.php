@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Page;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PageSeeder extends Seeder
 {
@@ -12,6 +13,9 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
+        DB::table('pages')->truncate();
+        DB::statement("SET FOREIGN_KEY_CHECKS=1;");
+        Page::factory(200)->create();
     }
 }
