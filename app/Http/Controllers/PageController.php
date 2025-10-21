@@ -14,7 +14,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        return Inertia::render("page/index");
+        return Inertia::render("pages/index");
     }
 
     /**
@@ -38,7 +38,7 @@ class PageController extends Controller
      */
     public function show(Page $page)
     {
-        return Inertia::render("page/show", compact('page'));
+        return Inertia::render("pages/show", compact('page'));
     }
 
     /**
