@@ -5,7 +5,7 @@ import { SharedData, User } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Posts } from '@/types/posts';
-import { Tags } from '@/types/tags';
+import { Tag } from '@/types/tags';
 import { dashboard } from '@/routes';
 
 
@@ -14,7 +14,7 @@ const Show = () => {
     const {user, can, tags, posts} = usePage<SharedData & {
         user: User,
         can: { view: boolean },
-        tags: Tags[],
+        tags: Tag[],
         posts: Posts[]
     }>().props;
 
