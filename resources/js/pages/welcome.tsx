@@ -14,7 +14,7 @@ import axios from 'axios';
 import { like } from '@/routes';
 import groups from '@/routes/groups';
 import members from '@/routes/members';
-import pages from '@/routes/pages';
+import pages from '@/routes/page';
 
 export default function Welcome() {
     const {auth, posts, pageList} = usePage<SharedData & {posts: Posts[], pageList: Page[]}>().props;

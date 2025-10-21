@@ -70,7 +70,7 @@ Route::get('/rules', function () {
 
 Route::post("/tags/{user}/detach/{tag}", [TagController::class, "removeTagUser"])->name('tags.detach');
 
-Route::resource("pages", PageController::class);
+Route::resource("page", PageController::class);
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
