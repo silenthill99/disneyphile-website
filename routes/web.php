@@ -55,6 +55,8 @@ Route::middleware(GuestToLanding::class)->group(function () {
         return Inertia::render('welcome');
     })->name('search');
     Route::post("/{post}/like", [PostController::class, "like"])->name('like');
+
+    Route::post("/", [PostController::class, "store"])->name('posts.store');
 });
 
 Route::get("/landing", function () {

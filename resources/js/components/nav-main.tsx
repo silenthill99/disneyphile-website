@@ -22,7 +22,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}
-                {auth.user.can?.admin && (
+                {auth.user && (
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild isActive={"/tags" === page.url} tooltip={{ children: "Essai"}}>
                             <Link href={"/tags"} prefetch>

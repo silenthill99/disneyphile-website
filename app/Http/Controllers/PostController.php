@@ -19,7 +19,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-
+            "content" => "required|string"
         ]);
 
         $post = Auth::user()->posts()->create($data);

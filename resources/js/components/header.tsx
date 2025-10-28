@@ -2,10 +2,10 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { SharedData } from '@/types';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Form, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEvent } from 'react';
 import Mailbox from '@/components/mailbox';
-import { dashboard, home, login, logout, search } from '@/routes';
+import { dashboard, home, login, logout } from '@/routes';
 import members from '@/routes/members';
 
 type LoginProps = {
@@ -14,7 +14,6 @@ type LoginProps = {
 };
 
 const Header = () => {
-    const { post: searchPost } = useForm();
 
     const {
         data: loginData,
@@ -24,11 +23,6 @@ const Header = () => {
         email: '',
         password: '',
     });
-
-    function handleSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        searchPost(search().url);
-    }
 
     function handleLogin(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -48,10 +42,10 @@ const Header = () => {
                 <Link href={home()}>
                     <AppLogoIcon className={'h-auto w-10 text-white'} />
                 </Link>
-                <form className={'space-x-2 hidden md:block'} onSubmit={handleSubmit}>
+                <Form className={'space-x-2 hidden md:block'}>
                     <input type="search" name="" id="" placeholder={'Recherche'} className={'bg-white'} />
                     <Button type={'submit'}>Valider</Button>
-                </form>
+                </Form>
                 {auth.user ? (
                     <div className={"flex gap-2"}>
                         <nav className={"hidden md:block text-white"}>
