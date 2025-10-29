@@ -6,7 +6,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from '@/components/ui/button';
 import tags from '@/routes/tags';
-import { ClosedCaptionIcon } from 'lucide-react';
+import { Trash2Icon } from 'lucide-react';
 import { Tag } from '@/types/tags';
 
 type Props = {
@@ -38,7 +38,7 @@ const TagRow = ({user, tags_all}: Props) => {
                 {user.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary">
                         {tag.name}
-                        <button onClick={() => handleClick(tag)}><ClosedCaptionIcon/></button>
+                        <button onClick={() => handleClick(tag)}><Trash2Icon/></button>
                     </Badge>
                 ))}
             </TableCell>
