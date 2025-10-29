@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from '@/types';
-import { Form, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from './ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from '@/components/ui/button';
 import tags from '@/routes/tags';
 import { ClosedCaptionIcon } from 'lucide-react';
@@ -15,20 +15,22 @@ type Props = {
 };
 
 const TagRow = ({user, tags_all}: Props) => {
+    const [selectedTag, setSelectedTag] = useState<string>('');
 
-    // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     if (!data.tag) return;
-    //
-    //     post(tags.attach({ user: user.slug, tag: parseInt(data.tag) }).url, {
-    //         onSuccess: () => reset()
-    //     });
-    // };
     const handleClick = (tag: Tag) => {
         if(confirm("Voulez-vous retirer ce tag ?")) {
             router.post(tags.detach({user: user.slug, tag: tag.id }).url)
         }
     }
+
+    const handleTagSubmit = () => {
+        if (!selectedTag) return;
+
+        router.post(tags.attach({user: user.slug, tag: parseInt(selectedTag)}).url, {}, {
+            onSuccess: () => setSelectedTag('')
+        })
+    }
+
     return (
         <TableRow>
             <TableCell>{user.name}</TableCell>
@@ -41,26 +43,26 @@ const TagRow = ({user, tags_all}: Props) => {
                 ))}
             </TableCell>
             <TableCell>
-                <Form {...tags.attach.form} className="flex">
+                <div className="flex">
                     <Select
-                        name={"tag"}
+                        value={selectedTag}
+                        onValueChange={setSelectedTag}
                     >
                         <SelectTrigger>
-                            {/*{data.tag*/}
-                            {/*    ? tags_all.find(t => t.id.toString() === data.tag)?.name || "Choisissez un tag"*/}
-                            {/*    : "Choisissez un tag"}*/}
-                            Choisissez un tag
+                            <SelectValue placeholder={"Choisissez un tag"}/>
                         </SelectTrigger>
                         <SelectContent>
-                            {tags_all.map((tag) => (
-                                <SelectItem key={tag.id} value={tag.id.toString()}>
-                                    {tag.name}
-                                </SelectItem>
-                            ))}
+                            <SelectGroup>
+                                {tags_all.map((tag) => (
+                                    <SelectItem key={tag.id} value={tag.id.toString()}>
+                                        {tag.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
                         </SelectContent>
                     </Select>
-                    <Button type="submit" className="ml-2">Ajouter</Button>
-                </Form>
+                    <Button onClick={handleTagSubmit} className="ml-2">Ajouter</Button>
+                </div>
             </TableCell>
         </TableRow>
     );
