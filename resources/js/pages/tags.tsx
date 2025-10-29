@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import TagRow from '@/components/tag-row';
 import tags from '@/routes/tags';
 import { Tag } from '@/types/tags';
+import PaginatedLinks from '@/components/paginated-links';
 
 type TagsForm = {
     name: string;
@@ -67,16 +68,8 @@ const Tags = () => {
                     </TableBody>
                 </Table>
             </div>
-            <div className={"space-x-5"}>
-                {users.links.map((link, index) => (
-                    <button
-                        key={index}
-                        disabled={!link.url}
-                        onClick={() => link.url && router.visit(link.url)}
-                        dangerouslySetInnerHTML={{__html: link.label}}
-                        className={`border px-2 py-1 rounded ${link.active && "font-bold"} ${link.url && "cursor-pointer"}`}
-                    />
-                ))}
+            <div className={"p-5"}>
+                <PaginatedLinks props={users}/>
             </div>
         </AppLayout>
     );
