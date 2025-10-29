@@ -7,15 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { Button } from '@/components/ui/button';
 import tags from '@/routes/tags';
 import { ClosedCaptionIcon } from 'lucide-react';
-
-type Tags = {
-    id: number;
-    name: string;
-};
+import { Tag } from '@/types/tags';
 
 type Props = {
-    user: User & { tags: Tags[] };
-    tags_all: Tags[];
+    user: User & { tags: Tag[] };
+    tags_all: Tag[];
 };
 
 const TagRow = ({user, tags_all}: Props) => {
@@ -31,7 +27,7 @@ const TagRow = ({user, tags_all}: Props) => {
             onSuccess: () => reset()
         });
     };
-    const handleClick = (tag: Tags) => {
+    const handleClick = (tag: Tag) => {
         if(confirm("Voulez-vous retirer ce tag ?")) {
             router.post(tags.detach({user: user.slug, tag: tag.id }).url)
         }
