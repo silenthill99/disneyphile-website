@@ -1,6 +1,6 @@
-import React, { FormEvent } from 'react';
+import React from 'react';
 import { User } from '@/types';
-import { router, useForm } from '@inertiajs/react';
+import { Form, router } from '@inertiajs/react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
@@ -15,18 +15,15 @@ type Props = {
 };
 
 const TagRow = ({user, tags_all}: Props) => {
-    const { data, setData, post, reset } = useForm<{ tag: string }>({
-        tag: ''
-    });
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!data.tag) return;
-
-        post(tags.attach({ user: user.slug, tag: parseInt(data.tag) }).url, {
-            onSuccess: () => reset()
-        });
-    };
+    // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     if (!data.tag) return;
+    //
+    //     post(tags.attach({ user: user.slug, tag: parseInt(data.tag) }).url, {
+    //         onSuccess: () => reset()
+    //     });
+    // };
     const handleClick = (tag: Tag) => {
         if(confirm("Voulez-vous retirer ce tag ?")) {
             router.post(tags.detach({user: user.slug, tag: tag.id }).url)
@@ -44,15 +41,15 @@ const TagRow = ({user, tags_all}: Props) => {
                 ))}
             </TableCell>
             <TableCell>
-                <form onSubmit={handleSubmit} className="flex">
+                <Form {...tags.attach.form} className="flex">
                     <Select
-                        value={data.tag}
-                        onValueChange={(value) => setData('tag', value)}
+                        name={"tag"}
                     >
                         <SelectTrigger>
-                            {data.tag
-                                ? tags_all.find(t => t.id.toString() === data.tag)?.name || "Choisissez un tag"
-                                : "Choisissez un tag"}
+                            {/*{data.tag*/}
+                            {/*    ? tags_all.find(t => t.id.toString() === data.tag)?.name || "Choisissez un tag"*/}
+                            {/*    : "Choisissez un tag"}*/}
+                            Choisissez un tag
                         </SelectTrigger>
                         <SelectContent>
                             {tags_all.map((tag) => (
@@ -63,7 +60,7 @@ const TagRow = ({user, tags_all}: Props) => {
                         </SelectContent>
                     </Select>
                     <Button type="submit" className="ml-2">Ajouter</Button>
-                </form>
+                </Form>
             </TableCell>
         </TableRow>
     );
