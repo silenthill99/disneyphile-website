@@ -7,6 +7,7 @@ import { FormEvent } from 'react';
 import Mailbox from '@/components/mailbox';
 import { dashboard, home, login, logout } from '@/routes';
 import members from '@/routes/members';
+import groups from '@/routes/groups';
 
 type LoginProps = {
     email: string;
@@ -65,14 +66,17 @@ const Header = () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger className={'rounded bg-white p-1'}>Menu</DropdownMenuTrigger>
                                 <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={groups.index()}>Liste des groupes</Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild className={'hover:underline'}>
                                         <Link href={dashboard()}>Tableau de bord</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild className={'hover:underline'}>
                                         <Link href={members.show({slug: auth.user.slug})}>Mon profil</Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={logout()} method={'post'} className={'cursor-pointer'}>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={logout()} method={'post'} className={'cursor-pointer hover:underline text-red-500 hover:text-red-500'}>
                                             Se déconnecter
                                         </Link>
                                     </DropdownMenuItem>

@@ -18,7 +18,7 @@ const Landing = () => {
     return (
         <div className={"min-h-screen bg-[url('/disneyland-486098.jpg')] bg-cover bg-fixed bg-center"}>
             {/*<Header />*/}
-            <main className={'min-h-screen gap-10 bg-black/50'}>
+            <main className={'min-h-screen gap-10 bg-black/50 p-5 2xl:p-0'}>
                 <div className={'container mx-auto grid md:grid-cols-2 min-h-screen items-center'}>
                     <div className={'flex flex-col justify-center text-white'}>
                         <h1 className={'mb-2 text-5xl font-bold drop-shadow-lg'}>Disneyphile</h1>

@@ -123,7 +123,7 @@ const Index = () => {
                     )}
                 </>
             ) : (
-                <p>Aucun groupxwes actuellement</p>
+                <p>Aucun groupes actuellement</p>
             )}
         </PageLayout>
     );
