@@ -2,20 +2,20 @@ const Rules = () => {
     return (
         <div className={'flex min-h-screen flex-col bg-gray-300'}>
             <header className={'h-19.5 bg-linear-to-r from-cyan-500 to-[#B562EB] text-white'}>
-                <div className={'container mx-auto flex h-full items-center justify-between'}>
+                <div className={'container mx-auto flex h-full items-center justify-between p-2 2xl:p-0'}>
                     <div className={'flex gap-5'}>
-                        <span className="text-5xl text-white">★</span>
-                        <span className="text-5xl text-white">★</span>
+                        <span className="text-sm md:text-3xl xl:text-5xl text-white">★</span>
+                        <span className="text-sm md:text-3xl xl:text-5xl text-white">★</span>
                     </div>
-                    <h1 className={'font-bold'}>Conditions générales d'utilisation</h1>
+                    <h1 className={'font-bold text-sm md:text-3xl xl:text-5xl'}>Conditions générales d'utilisation</h1>
                     <div className={'flex gap-5'}>
-                        <span className="text-5xl text-white">★</span>
-                        <span className="text-5xl text-white">★</span>
+                        <span className="text-sm md:text-3xl xl:text-5xl text-white">★</span>
+                        <span className="text-sm md:text-3xl xl:text-5xl text-white">★</span>
                     </div>
                 </div>
             </header>
             <main className={'m-5 grow rounded-2xl bg-white'}>
-                <div className={'space-y-5 container mx-auto'}>
+                <div className={'space-y-5 container mx-auto p-2'}>
                     <h1 className={'font-bold text-4xl'}>Introduction</h1>
                     <p>
                         Ces conditions générales d'utilisation ont été mises en place afin d'assurer une bonne harmonie au sein de ce site internet, ainsi que d'assurer la sécurité de tous. <br />
