@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -12,8 +12,6 @@ import login from '@/routes/login';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const Landing = () => {
-
-    const [remember, setRemember] = useState(false)
 
     return (
         <div className={"min-h-screen bg-[url('/disneyland-486098.jpg')] bg-cover bg-fixed bg-center"}>
@@ -31,7 +29,6 @@ const Landing = () => {
                         </TabsList>
                         <TabsContent
                             value={'register'}
-                            // className={'min-w-100 rounded-xl bg-white/90 p-5 shadow-xl ring-1 ring-white/10 backdrop-blur-sm grow min-h-100'}
                         >
                             <Card>
                                 <CardHeader>
@@ -113,38 +110,42 @@ const Landing = () => {
                                 <CardContent>
                                     <Form {...login.store.form()} resetOnSuccess={true} resetOnError={['password']}>
                                         {({errors, processing}) => (
-                                            <>
-                                                <Label htmlFor={"email"}>Adresse mail</Label>
-                                                <Input
-                                                    type={'email'}
-                                                    placeholder={'Adresse mail'}
-                                                    id={"email"}
-                                                    name={"email"}
-                                                />
-                                                {errors.email && (
-                                                    <p className={"text-red-500"}>{errors.email}</p>
-                                                )}
-                                                <br />
-                                                <Label htmlFor={"password"}>Mot de pase</Label>
-                                                <Input
-                                                    type={'password'}
-                                                    placeholder={'Votre mot de passe'}
-                                                    id={"password"}
-                                                    name={"password"}
-                                                />
-                                                {errors.password && (
-                                                    <p className={"text-red-500"}>{errors.password}</p>
-                                                )}
-                                                <br />
+                                            <div className={"space-y-4"}>
                                                 <div>
-                                                    <Checkbox id={'remember'} checked={remember} onCheckedChange={checked => setRemember(checked === true)} />
+                                                    <Label htmlFor={'email'}>Adresse mail</Label>
+                                                    <Input
+                                                        type={'email'}
+                                                        placeholder={'Adresse mail'}
+                                                        id={'email'}
+                                                        name={'email'}
+                                                    />
+                                                    {errors.email && (
+                                                        <p className={'text-red-500'}>{errors.email}</p>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <Label htmlFor={'password'}>Mot de pase</Label>
+                                                    <Input
+                                                        type={'password'}
+                                                        placeholder={'Votre mot de passe'}
+                                                        id={'password'}
+                                                        name={'password'}
+                                                    />
+                                                    {errors.password && (
+                                                        <p className={'text-red-500'}>{errors.password}</p>
+                                                    )}
+                                                </div>
+                                                <div className={"flex items-center gap-2"}>
+                                                    <Checkbox
+                                                        id={'remember'}
+                                                        name={'remember'}
+                                                    />
                                                     <Label htmlFor={"remember"}>Se souvenir de moi</Label>
-                                                    <input type={"hidden"} name={"remember"} value={remember ? "1" : "0"}/>
                                                 </div>
                                                 <Button type={'submit'} className={'cursor-pointer transition-all duration-200 ease-in-out hover:bg-pink-600'}>
                                                     Bon retour parmi nous ! {processing && <LoaderCircle className={'animate-spin'} />}
                                                 </Button>
-                                            </>
+                                            </div>
                                         )}
                                     </Form>
                                 </CardContent>
