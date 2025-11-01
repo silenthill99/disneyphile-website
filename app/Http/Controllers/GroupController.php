@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGroupRequest;
+use App\Http\Requests\UpdateGroupRequest;
 use App\Models\Group;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -16,14 +16,9 @@ class GroupController extends Controller
         return Inertia::render("groups/index", compact("groupList"));
     }
 
-    public function store(Request $request)
+    public function store(StoreGroupRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'private' => 'required|boolean',
-            'banniere' => "nullable|image|max:8000",
-            'description' => "required|string"
-        ]);
+        $data = $request->validated();
 
         if($request->hasFile("banniere"))
         {
@@ -43,11 +38,9 @@ class GroupController extends Controller
         return Inertia::render("groups/show", compact("group"));
     }
 
-    public function update(Request $request, Group $group)
+    public function update(UpdateGroupRequest $request, Group $group)
     {
-        $data = $request->validate([
-
-        ]);
+        $data = $request->validated();
 
         $group->update($data);
 
