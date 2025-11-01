@@ -2,7 +2,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import PageLayout from '@/layouts/page-layout';
 import { Page, SharedData } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import DOMPurify from 'dompurify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Create from '@/components/articles/create';
 import { useInitials } from '@/hooks/use-initials';
@@ -38,12 +37,12 @@ export default function Welcome() {
         }
     }
 
-    const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
-    const rejex = /https?:\/\/\S+/g;
-    const linkedText = text.replace(rejex, (url) => {
-        return `<a href="${url}" class="text-blue-500">${url}</a>`
-    })
-    DOMPurify.sanitize(linkedText);
+    // const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
+    // const rejex = /https?:\/\/\S+/g;
+    // const linkedText = text.replace(rejex, (url) => {
+    //     return `<a href="${url}" class="text-blue-500">${url}</a>`
+    // })
+    // DOMPurify.sanitize(linkedText);
 
     const getInitials = useInitials();
     return (
