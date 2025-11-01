@@ -15,6 +15,7 @@ import { like } from '@/routes';
 import groups from '@/routes/groups';
 import members from '@/routes/members';
 import pages from '@/routes/pages';
+import storage from '@/routes/storage';
 
 export default function Welcome() {
     const {auth, posts, pageList} = usePage<SharedData & {posts: Posts[], pageList: Page[]}>().props;
@@ -54,7 +55,7 @@ export default function Welcome() {
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
-                    <AvatarImage src={auth.user.image_profile && `/storage/${auth.user.image_profile}`} className={auth.user.image_profile && 'object-cover'} />
+                    <AvatarImage src={auth.user.image_profile && storage.local(auth.user.image_profile).url} className={auth.user.image_profile && 'object-cover'} />
                     <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
                 </Avatar>
                 <h2 className={'text-2xl'}>{auth.user.name}</h2>
@@ -101,7 +102,7 @@ export default function Welcome() {
                                         <Link href={members.show({slug: p.user.slug})}
                                               className={'flex items-center gap-5'}>
                                             <Avatar>
-                                                <AvatarImage src={p.user.image_profile && "/storage/" + p.user.image_profile} />
+                                                <AvatarImage src={p.user.image_profile && storage.local(p.user.image_profile).url} />
                                                 <AvatarFallback>{getInitials(p.user.name)}</AvatarFallback>
                                             </Avatar>
                                             <span>{p.user.name}</span>

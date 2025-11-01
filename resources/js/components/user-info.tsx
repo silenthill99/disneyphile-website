@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { type User } from '@/types';
+import storage from '@/routes/storage';
 
 export function UserInfo({ user, showEmail = false }: { user: User; showEmail?: boolean }) {
     const getInitials = useInitials();
@@ -9,7 +10,7 @@ export function UserInfo({ user, showEmail = false }: { user: User; showEmail?: 
         <>
             <Avatar className="h-8 w-8 overflow-hidden rounded-full">
 
-                <AvatarImage src={"/storage/"+user.image_profile} alt={user.name} />
+                <AvatarImage src={user.image_profile && storage.local(user.image_profile).url} alt={user.name} />
                 <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                     {getInitials(user.name)}
                 </AvatarFallback>

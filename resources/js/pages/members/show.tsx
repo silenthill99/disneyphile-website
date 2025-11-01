@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Posts } from '@/types/posts';
 import { Tag } from '@/types/tags';
 import { dashboard } from '@/routes';
+import storage from '@/routes/storage';
 
 
 
@@ -23,7 +24,7 @@ const Show = () => {
             <Head title={user.name} />
             <div className={'bg-white hidden md:flex flex-col items-center p-8 rounded-xl gap-6 h-min shadow-md sticky top-24'}>
                 <img
-                    src={user.image_profile ? ("/storage/" + user.image_profile) : ("/assets/images/logo.svg")} alt={"Photo de profil"}
+                    src={user.image_profile ? storage.local(user.image_profile).url : ("/assets/images/logo.svg")} alt={"Photo de profil"}
                     className={`size-40 object-cover rounded-full border-4 border-white shadow-lg transition duration-300 hover:shadow-xl ${!user.image_profile && "bg-gray-200"}`}
                 />
                 <div className={"text-center"}>

@@ -61,7 +61,7 @@ Route::middleware(GuestToLanding::class)->group(function () {
 
 Route::get("/landing", function () {
     return Inertia::render('landing');
-})->name('landing');
+})->middleware('guest')->name('landing');
 
 Route::get("/members/{user}", [UserController::class, "show"])
     ->name('members.show');
