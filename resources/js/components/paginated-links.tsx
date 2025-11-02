@@ -2,6 +2,7 @@ import React from 'react';
 import { PaginatedProps } from '@/types';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
+import { decode } from 'html-entities';
 
 type Props = {
     props: PaginatedProps<unknown>
@@ -16,8 +17,7 @@ const PaginatedLinks = ({props}: Props) => {
                     key={id}
                     disabled={!link.url || link.active}
                     onClick={() => link.url && router.visit(link.url)}
-                    dangerouslySetInnerHTML={{__html: link.label}}
-                />
+                >{decode(link.label)}</Button>
             ))}
         </div>
     );
