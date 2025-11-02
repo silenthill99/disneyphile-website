@@ -4,6 +4,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
 use App\Models\Group;
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/groups', [GroupController::class, "index"])->name("groups.index");
     Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
+    Route::resource('todo', TodoController::class);
 });
 
 Route::middleware(GuestToLanding::class)->group(function () {
