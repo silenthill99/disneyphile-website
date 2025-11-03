@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Todo;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 
 class TodoPolicy
 {
@@ -13,7 +13,7 @@ class TodoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role->name === 'Admin';
+        return Gate::allows('admin', $user);
     }
 
     /**
@@ -29,7 +29,7 @@ class TodoPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role->name === 'Admin';
+        return Gate::allows('admin', $user);
     }
 
     /**
@@ -37,7 +37,7 @@ class TodoPolicy
      */
     public function update(User $user, Todo $todo): bool
     {
-        return $user->role->name === 'Admin';
+        return Gate::allows('admin', $user);
     }
 
     /**
@@ -45,7 +45,7 @@ class TodoPolicy
      */
     public function delete(User $user, Todo $todo): bool
     {
-        return $user->role->name === 'Admin';
+        return Gate::allows('admin', $user);
     }
 
     /**
