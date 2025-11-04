@@ -2,20 +2,23 @@
 
 ## 1. Identification de la fonctionnalité
 
-**Fonctionnalité testée** : Gestion des groupes (Création + Validation)
+**Fonctionnalité testée** : Gestion des groupes (CRUD complet)
 
 **Périmètre** :
 - Création de groupes avec/sans bannière
+- Modification de groupes existants
+- Suppression de groupes
 - Gestion de la visibilité (public/privé)
 - Validation des données en entrée
 - Génération automatique de slugs uniques
 
 **Justification du choix** : Cette fonctionnalité est représentative car elle illustre :
-- Les opérations de création (Create)
+- Les opérations CRUD complètes (Create, Read, Update, Delete)
 - Les relations Eloquent (User, Group, Members)
-- La validation via FormRequest (StoreGroupRequest)
+- La validation via FormRequest (StoreGroupRequest, UpdateGroupRequest)
 - L'upload de fichiers (bannière)
 - L'intégration avec Inertia.js
+- Les autorisations (seul le propriétaire peut modifier/supprimer)
 
 ---
 
@@ -475,6 +478,65 @@ Aucun groupe créé
 
 ---
 
+### CAS TEST 10 : Modification de groupe par le propriétaire
+
+**Objectif** : Vérifier qu'un propriétaire peut modifier son groupe
+
+**Données en entrée** :
+```php
+[
+    'name' => 'Les Fans de Mickey (Édité)',
+    'description' => 'Description mise à jour',
+    'private' => true,
+    'banniere' => nouvelle_image.jpg
+]
+```
+
+**Pré-conditions** :
+- Utilisateur authentifié (Alice)
+- Alice est propriétaire du groupe
+
+**Résultats attendus** :
+- Groupe mis à jour en base
+- Redirection vers `/groups/{slug}`
+- Message de succès
+
+---
+
+### CAS TEST 11 : Modification par un non-propriétaire (ÉCHEC ATTENDU)
+
+**Objectif** : Vérifier qu'un utilisateur ne peut pas modifier un groupe dont il n'est pas propriétaire
+
+**Résultats attendus** :
+- Redirection avec erreur d'autorisation
+- Aucune modification en base
+
+---
+
+### CAS TEST 12 : Suppression de groupe par le propriétaire
+
+**Objectif** : Vérifier qu'un propriétaire peut supprimer son groupe
+
+**Pré-conditions** :
+- Alice est propriétaire du groupe
+
+**Résultats attendus** :
+- Groupe supprimé de la base
+- Redirection vers `/groups`
+- Message de succès
+
+---
+
+### CAS TEST 13 : Suppression par un non-propriétaire (ÉCHEC ATTENDU)
+
+**Objectif** : Vérifier qu'un utilisateur ne peut pas supprimer un groupe dont il n'est pas propriétaire
+
+**Résultats attendus** :
+- Redirection avec erreur d'autorisation
+- Groupe non supprimé
+
+---
+
 ## 4. Synthèse des Résultats
 
 ### Tableau récapitulatif
@@ -490,6 +552,10 @@ Aucun groupe créé
 | CAS 7 | Slug unique | Succès | ✅ PASS |
 | CAS 8 | Validation format fichier | Échec | ⚠️ FAIL |
 | CAS 9 | Accès non authentifié | Échec | ⚠️ FAIL |
+| CAS 10 | Modification par propriétaire | Succès | ✅ PASS |
+| CAS 11 | Modification par non-propriétaire | Échec | ⚠️ FAIL |
+| CAS 12 | Suppression par propriétaire | Succès | ✅ PASS |
+| CAS 13 | Suppression par non-propriétaire | Échec | ⚠️ FAIL |
 
 ### Couverture fonctionnelle
 
@@ -497,6 +563,14 @@ Aucun groupe créé
 - Création simple (CAS 1)
 - Création avec upload (CAS 2)
 - Génération de slug unique (CAS 7)
+
+✅ **Modification (Update)**
+- Modification par propriétaire (CAS 10)
+- Protection modification non autorisée (CAS 11)
+
+✅ **Suppression (Delete)**
+- Suppression par propriétaire (CAS 12)
+- Protection suppression non autorisée (CAS 13)
 
 ✅ **Validation des Données**
 - Champs obligatoires (CAS 3, 5)
@@ -506,6 +580,7 @@ Aucun groupe créé
 
 ✅ **Sécurité & Autorisation**
 - Authentification requise (CAS 9)
+- Autorisation propriétaire (CAS 11, 13)
 
 ✅ **Relations Eloquent**
 - User -> Group (owner)
@@ -594,20 +669,24 @@ Image::make($file)->resize(1200, 400)->save($path);
 ## 7. Conclusion
 
 ### Points Forts
-✅ Validation complète via FormRequest
+✅ CRUD complet implémenté
+✅ Validation complète via FormRequest (Store + Update)
 ✅ Génération automatique de slugs uniques
 ✅ Upload de fichiers sécurisé
 ✅ Respect des conventions Laravel
 ✅ Protection par authentification
+✅ Autorisation propriétaire pour modification/suppression
 
 ### Conformité Métier
-La fonctionnalité "Création de Groupes" répond aux exigences fonctionnelles d'une plateforme sociale :
+La fonctionnalité "Gestion des Groupes" répond aux exigences fonctionnelles d'une plateforme sociale :
 - Création sécurisée avec validation
+- Modification réservée au propriétaire
+- Suppression contrôlée
 - Visibilité configurable (public/privé)
 - Upload de médias (bannière)
 - Protection des données utilisateur
 
-**Validation finale** : ✅ Fonctionnalité opérationnelle et sécurisée
+**Validation finale** : ✅ Fonctionnalité CRUD complète, opérationnelle et sécurisée
 
 ---
 
@@ -671,7 +750,7 @@ public static function booted(): void
 ---
 
 **Document préparé par** : Assistant IA
-**Date** : 2025-11-03
-**Version** : 2.0
+**Date** : 2025-11-04
+**Version** : 3.0
 **Application** : Disneyphile - Plateforme sociale Disney
-**Périmètre** : Tests manuels de la fonctionnalité de création de groupes
+**Périmètre** : Tests manuels du CRUD complet de la fonctionnalité Groupes
