@@ -58,7 +58,7 @@ class GroupController extends Controller
     {
         $group->delete();
 
-        return response()->json();
+        return Redirect::back();
     }
 
     public function create() {

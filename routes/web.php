@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
     Route::get("/groups/{group}/edit", [GroupController::class, "edit"])->name("groups.edit");
     Route::patch("/groups/{group}", [GroupController::class, "update"])->name("groups.update");
+    Route::post("/groups/{group}/destroy", [GroupController::class, "destroy"])->name("groups.destroy");
 
     Route::resource('todo', TodoController::class);
 });
