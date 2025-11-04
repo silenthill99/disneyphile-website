@@ -6,6 +6,7 @@ use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GroupController extends Controller
@@ -42,9 +43,15 @@ class GroupController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->hasFile("banniere")) {
+            $imageFile = $request->file('banniere');
+            $imageName = time() . "_" . $imageFile->getClientOriginalName();
+            $data["bannier"] = "/storage/".$imageFile->storeAs("images", $imageName, "public");
+        }
+
         $group->update($data);
 
-        return $group;
+        return Redirect::route("groups.index");
     }
 
     public function destroy(Group $group)
@@ -56,6 +63,17 @@ class GroupController extends Controller
 
     public function create() {
         return Inertia::render("groups/create");
+    }
+
+    public function createdGroups()
+    {
+        $groupList = Auth::user()->createdGroups;
+        return Inertia::render("groups/my-groups", compact("groupList"));
+    }
+
+    public function edit(Group $group)
+    {
+        return Inertia::render("groups/edit", compact("group"));
     }
 
 }

@@ -13,7 +13,7 @@ class UpdateGroupRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('update', $this->route('group'));
+        return Gate::allows('update', $this->route('group')) || Gate::allows('isAdmin');
     }
 
     /**
@@ -24,7 +24,10 @@ class UpdateGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'nullable|string|max:255',
+            'private' => 'nullable|boolean',
+            'banniere' => "nullable|image|max:8000",
+            'description' => "nullable|string"
         ];
     }
 }

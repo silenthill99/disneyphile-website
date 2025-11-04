@@ -7,12 +7,17 @@ import { Link } from '@inertiajs/react';
 import { LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 import { home } from '@/routes';
+import groups from '@/routes/groups';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: "Mes groupes",
+        href: groups.mine().url
     }
 ];
 

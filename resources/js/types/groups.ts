@@ -8,5 +8,6 @@ export type Groups ={
     bannier? : string,
     created_at: string,
     updated_at: string,
-    slug: string
+    slug: string,
+    private: boolean
 }

@@ -7,10 +7,8 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
-use App\Models\Group;
 use App\Models\Page;
 use App\Models\Post;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +39,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/groups/create", [GroupController::class, "create"])->name("groups.create");
     Route::get('/groups', [GroupController::class, "index"])->name("groups.index");
     Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
+    Route::get("/groups/created", [GroupController::class, "createdGroups"])->name("groups.mine");
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
+    Route::get("/groups/{group}/edit", [GroupController::class, "edit"])->name("groups.edit");
+    Route::patch("/groups/{group}", [GroupController::class, "update"])->name("groups.update");
+
     Route::resource('todo', TodoController::class);
 });
 
