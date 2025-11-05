@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 
 class GroupPolicy
 {
@@ -37,7 +38,7 @@ class GroupPolicy
      */
     public function update(User $user, Group $group): bool
     {
-        return $group->owner->is($user);
+        return $group->owner->is($user) || Gate::allows('isAdmin');
     }
 
     /**
@@ -45,7 +46,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group): bool
     {
-        return false;
+        return $group->owner->is($user) || Gate::allows('isAdmin');
     }
 
     /**

@@ -8,6 +8,7 @@ import groups from '@/routes/groups';
 import { ImageIcon } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type Props = {
     group: Groups
@@ -75,11 +76,17 @@ const Edit = () => {
                         <br/>
                         <div className={"flex items-center gap-2"}>
                             <Label htmlFor={"private"}>Groupe privé</Label>
-                            <Input
+                            <input
+                                type="hidden"
+                                name="private"
+                                value="0"
+                            />
+                            <Checkbox
                                 id="private"
-                                type={"checkbox"}
+                                name={"private"}
                                 defaultChecked={group.private}
                                 className={"w-5"}
+                                value={1}
                             />
                             {errors.private && (
                                 <p className={"text-red-500"}>{errors.private}</p>

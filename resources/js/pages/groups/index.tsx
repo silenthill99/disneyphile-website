@@ -1,7 +1,7 @@
 import React from 'react';
 import PageLayout from '@/layouts/page-layout';
 import { Link, usePage } from '@inertiajs/react';
-import { PaginatedProps } from '@/types';
+import { PaginatedProps, SharedData } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Groups } from '@/types/groups';
 import groups from '@/routes/groups';
@@ -12,7 +12,7 @@ type Props = {
 }
 
 const Index = () => {
-    const { groupList } = usePage<Props>().props;
+    const { groupList, auth } = usePage<Props & SharedData>().props;
 
     return (
         <PageLayout className={'container mx-auto my-5 rounded-2xl bg-white/80 backdrop-blur-md p-3 overflow-y-auto'}>
@@ -32,6 +32,9 @@ const Index = () => {
                                     </CardHeader>
                                     <CardContent>
                                         <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
+                                        {auth.user.role?.name === "Admin" || group.owner.id === auth.user.id && (
+                                            <Link href={groups.destroy(group.slug)} className="text-red-500 hover:underline" method={"delete"}>Supprimer</Link>
+                                        )}
                                     </CardContent>
                                 </Card>
                             </Link>

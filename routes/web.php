@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\GuestToLanding;
+use App\Models\Group;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\User;
@@ -43,7 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
     Route::get("/groups/{group}/edit", [GroupController::class, "edit"])->name("groups.edit");
     Route::patch("/groups/{group}", [GroupController::class, "update"])->name("groups.update");
-    Route::post("/groups/{group}/destroy", [GroupController::class, "destroy"])->name("groups.destroy");
+    Route::delete("/groups/{group}", [GroupController::class, "destroy"])
+        ->can('delete', 'group')
+        ->name("groups.destroy");
 
     Route::resource('todo', TodoController::class);
 });

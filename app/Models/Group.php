@@ -44,15 +44,7 @@ class Group extends Model
     public static function booted(): void
     {
         static::creating(function (Group $group) {
-            $slug = Str::slug($group->name);
-            $originalSlug = $slug;
-            $count = 1;
-
-            while (Group::where('slug', $slug)->exists()) {
-                $slug = $originalSlug . "-" . $count++;
-            }
-
-            $group->slug = $slug;
+            $group->slug = Str::slug($group->name);
         });
     }
 }

@@ -18,7 +18,7 @@
 - La validation via FormRequest (StoreGroupRequest, UpdateGroupRequest)
 - L'upload de fichiers (bannière)
 - L'intégration avec Inertia.js
-- Les autorisations (seul le propriétaire peut modifier/supprimer)
+- Les autorisations (seul le propriétaire ou un administrateur peut modifier/supprimer)
 
 ---
 
@@ -69,7 +69,6 @@ Email Verified: Oui
 **Pré-conditions** :
 - Utilisateur authentifié (Alice)
 - Email vérifié
-- Aucun groupe existant avec ce nom
 
 **Procédure de test** :
 1. Se connecter avec le compte Alice
@@ -176,7 +175,7 @@ storage/app/public/images/{timestamp}_banniere.jpg existe
 
 **Pré-conditions** :
 - Utilisateur authentifié (Alice)
-- StoreGroupRequest doit valider 'name' (required|string|max:255)
+- StoreGroupRequest doit valider 'name' (required|string|max:255|unique:groups)
 
 **Procédure de test** :
 1. Se connecter avec le compte Alice
@@ -337,13 +336,13 @@ Aucun nouveau groupe créé
 
 ---
 
-### CAS TEST 7 : Génération automatique de slug unique
+### CAS TEST 7 : Validation - Nom de groupe déjà existant (ÉCHEC ATTENDU)
 
-**Objectif** : Vérifier la génération de slugs uniques en cas de collision
+**Objectif** : Vérifier la contrainte d'unicité sur le nom de groupe
 
 **Données en entrée** :
 ```php
-// Premier groupe
+// Premier groupe (création réussie)
 [
     'name' => 'Fans de Cendrillon',
     'description' => 'Premier groupe',
@@ -351,7 +350,7 @@ Aucun nouveau groupe créé
     'banniere' => null
 ]
 
-// Deuxième groupe (même nom)
+// Deuxième groupe (même nom - doit échouer)
 [
     'name' => 'Fans de Cendrillon',
     'description' => 'Deuxième groupe avec le même nom',
@@ -362,35 +361,38 @@ Aucun nouveau groupe créé
 
 **Pré-conditions** :
 - Utilisateur authentifié (Alice)
-- Aucun groupe existant avec ce nom
+- Un groupe nommé "Fans de Cendrillon" existe déjà en base
+- Contrainte `UNIQUE` sur la colonne `name` en base de données
 
 **Procédure de test** :
 1. Se connecter avec le compte Alice
-2. Créer le premier groupe "Fans de Cendrillon"
-3. Vérifier le slug généré
-4. Créer un deuxième groupe avec le même nom
-5. Vérifier le nouveau slug généré
+2. Créer le premier groupe "Fans de Cendrillon" (doit réussir)
+3. Vérifier que le groupe est créé avec slug: `fans-de-cendrillon`
+4. Tenter de créer un deuxième groupe avec exactement le même nom
+5. Observer l'erreur retournée
 
 **Résultats attendus** :
 ```php
-// Groupe 1
-[
-    'name' => 'Fans de Cendrillon',
-    'slug' => 'fans-de-cendrillon' // Slug original
-]
+// HTTP Status (pour la deuxième tentative)
+Status: 302 (Redirect back avec erreurs)
 
-// Groupe 2
-[
-    'name' => 'Fans de Cendrillon',
-    'slug' => 'fans-de-cendrillon-1' // Slug avec suffixe numérique
-]
+// Erreurs de validation
+"The name has already been taken."
+// OU
+"Ce nom de groupe est déjà utilisé."
+
+// Base de données INCHANGÉE
+Aucun nouveau groupe créé
+Un seul groupe "Fans de Cendrillon" existe
 ```
 
 **Critères de validation** :
-- ✅ Premier groupe créé avec slug: `fans-de-cendrillon`
-- ✅ Deuxième groupe créé avec slug: `fans-de-cendrillon-1`
-- ✅ Aucune collision de slug
-- ✅ Logique de uniqueness dans `Group::booted()` fonctionne
+- ✅ Premier groupe créé avec succès
+- ✅ Slug généré automatiquement: `fans-de-cendrillon`
+- ✅ Deuxième tentative échoue avec erreur de validation
+- ✅ Message d'erreur explicite sur le champ `name`
+- ✅ Contrainte `UNIQUE` en base protège contre les doublons
+- ✅ Aucun groupe dupliqué en base de données
 
 ---
 
@@ -478,9 +480,9 @@ Aucun groupe créé
 
 ---
 
-### CAS TEST 10 : Modification de groupe par le propriétaire
+### CAS TEST 10 : Modification de groupe par le propriétaire ou un administrateur
 
-**Objectif** : Vérifier qu'un propriétaire peut modifier son groupe
+**Objectif** : Vérifier qu'un propriétaire ou un administrateur peut modifier un groupe
 
 **Données en entrée** :
 ```php
@@ -493,32 +495,66 @@ Aucun groupe créé
 ```
 
 **Pré-conditions** :
-- Utilisateur authentifié (Alice)
-- Alice est propriétaire du groupe
+- Utilisateur authentifié (Alice ou un admin)
+- Alice est propriétaire du groupe OU l'utilisateur a le rôle admin
+- Un groupe "Les Fans de Mickey" existe déjà
+- UpdateGroupRequest valide avec tous les champs nullable
+
+**Procédure de test** :
+1. Se connecter avec le compte Alice (propriétaire)
+2. Accéder à la page `/groups/{slug}/edit`
+3. Modifier le nom, la description et la visibilité
+4. Uploader une nouvelle bannière
+5. Soumettre le formulaire
 
 **Résultats attendus** :
-- Groupe mis à jour en base
-- Redirection vers `/groups/{slug}`
-- Message de succès
+```php
+// HTTP Status
+Status: 302 (Redirect vers /groups)
+
+// Message de succès (implicite ou explicite selon implémentation)
+
+// Enregistrement en base
+[
+    'name' => 'Les Fans de Mickey (Édité)',
+    'slug' => 'les-fans-de-mickey', // Slug inchangé (stabilité des URLs)
+    'description' => 'Description mise à jour',
+    'private' => 1,
+    'banniere' => '/storage/images/{timestamp}_nouvelle_image.jpg',
+    'owner_id' => {ID d'Alice}
+]
+```
+
+**Critères de validation** :
+- ✅ Redirection vers `/groups`
+- ✅ Groupe mis à jour en base
+- ✅ Slug reste inchangé (garantit la stabilité des URLs)
+- ✅ Ancienne bannière remplacée par la nouvelle
 
 ---
 
-### CAS TEST 11 : Modification par un non-propriétaire (ÉCHEC ATTENDU)
+### CAS TEST 11 : Modification par un non-propriétaire non-admin (ÉCHEC ATTENDU)
 
-**Objectif** : Vérifier qu'un utilisateur ne peut pas modifier un groupe dont il n'est pas propriétaire
+**Objectif** : Vérifier qu'un utilisateur (ni propriétaire ni administrateur) ne peut pas modifier un groupe
+
+**Pré-conditions** :
+- Utilisateur authentifié (Bob)
+- Bob n'est PAS propriétaire du groupe
+- Bob n'a PAS le rôle admin
 
 **Résultats attendus** :
-- Redirection avec erreur d'autorisation
+- Redirection avec erreur d'autorisation (403 Forbidden)
 - Aucune modification en base
 
 ---
 
-### CAS TEST 12 : Suppression de groupe par le propriétaire
+### CAS TEST 12 : Suppression de groupe par le propriétaire ou un administrateur
 
-**Objectif** : Vérifier qu'un propriétaire peut supprimer son groupe
+**Objectif** : Vérifier qu'un propriétaire ou un administrateur peut supprimer un groupe
 
 **Pré-conditions** :
-- Alice est propriétaire du groupe
+- Utilisateur authentifié (Alice ou un admin)
+- Alice est propriétaire du groupe OU l'utilisateur a le rôle admin
 
 **Résultats attendus** :
 - Groupe supprimé de la base
@@ -527,12 +563,17 @@ Aucun groupe créé
 
 ---
 
-### CAS TEST 13 : Suppression par un non-propriétaire (ÉCHEC ATTENDU)
+### CAS TEST 13 : Suppression par un non-propriétaire non-admin (ÉCHEC ATTENDU)
 
-**Objectif** : Vérifier qu'un utilisateur ne peut pas supprimer un groupe dont il n'est pas propriétaire
+**Objectif** : Vérifier qu'un utilisateur (ni propriétaire ni administrateur) ne peut pas supprimer un groupe
+
+**Pré-conditions** :
+- Utilisateur authentifié (Bob)
+- Bob n'est PAS propriétaire du groupe
+- Bob n'a PAS le rôle admin
 
 **Résultats attendus** :
-- Redirection avec erreur d'autorisation
+- Redirection avec erreur d'autorisation (403 Forbidden)
 - Groupe non supprimé
 
 ---
@@ -549,27 +590,27 @@ Aucun groupe créé
 | CAS 4 | Validation fichier trop gros | Échec | ⚠️ FAIL |
 | CAS 5 | Validation description manquante | Échec | ⚠️ FAIL |
 | CAS 6 | Validation type boolean | Échec | ⚠️ FAIL |
-| CAS 7 | Slug unique | Succès | ✅ PASS |
+| CAS 7 | Validation nom unique | Échec | ⚠️ FAIL |
 | CAS 8 | Validation format fichier | Échec | ⚠️ FAIL |
 | CAS 9 | Accès non authentifié | Échec | ⚠️ FAIL |
-| CAS 10 | Modification par propriétaire | Succès | ✅ PASS |
-| CAS 11 | Modification par non-propriétaire | Échec | ⚠️ FAIL |
-| CAS 12 | Suppression par propriétaire | Succès | ✅ PASS |
-| CAS 13 | Suppression par non-propriétaire | Échec | ⚠️ FAIL |
+| CAS 10 | Modification par propriétaire ou admin | Succès | ✅ PASS |
+| CAS 11 | Modification par non-propriétaire non-admin | Échec | ⚠️ FAIL |
+| CAS 12 | Suppression par propriétaire ou admin | Succès | ✅ PASS |
+| CAS 13 | Suppression par non-propriétaire non-admin | Échec | ⚠️ FAIL |
 
 ### Couverture fonctionnelle
 
 ✅ **Création (Create)**
 - Création simple (CAS 1)
 - Création avec upload (CAS 2)
-- Génération de slug unique (CAS 7)
+- Contrainte unique sur le nom (CAS 7)
 
 ✅ **Modification (Update)**
-- Modification par propriétaire (CAS 10)
+- Modification par propriétaire ou administrateur (CAS 10)
 - Protection modification non autorisée (CAS 11)
 
 ✅ **Suppression (Delete)**
-- Suppression par propriétaire (CAS 12)
+- Suppression par propriétaire ou administrateur (CAS 12)
 - Protection suppression non autorisée (CAS 13)
 
 ✅ **Validation des Données**
@@ -577,6 +618,7 @@ Aucun groupe créé
 - Contraintes de taille fichier (CAS 4)
 - Types de données (CAS 6)
 - Format de fichier (CAS 8)
+- Contrainte unique sur le nom (CAS 7)
 
 ✅ **Sécurité & Autorisation**
 - Authentification requise (CAS 9)
@@ -587,7 +629,7 @@ Aucun groupe créé
 
 ✅ **Fonctionnalités Avancées**
 - Upload fichier (CAS 2)
-- Génération slug unique (CAS 7)
+- Génération automatique de slug depuis le nom
 
 ---
 
@@ -608,22 +650,7 @@ Aucun groupe créé
 
 ---
 
-### Point d'Attention 2 : Concurrence lors de la création de slugs
-
-**Observation** :
-```php
-// Si deux utilisateurs créent le même groupe simultanément
-Thread 1: Group::create(['name' => 'Test']) -> slug = 'test'
-Thread 2: Group::create(['name' => 'Test']) -> slug = 'test' (collision ?)
-```
-
-**Recommandation** :
-- Vérifier si `unique:groups,slug` est dans la migration
-- Ajouter un test de concurrence si nécessaire
-
----
-
-### Point d'Attention 3 : Nettoyage des fichiers uploads en cas d'erreur
+### Point d'Attention 2 : Nettoyage des fichiers uploads en cas d'erreur
 
 **Observation** :
 ```php
@@ -634,6 +661,32 @@ Thread 2: Group::create(['name' => 'Test']) -> slug = 'test' (collision ?)
 **Recommandation** :
 - Vérifier que les fichiers temporaires sont bien nettoyés
 - Implémenter un garbage collector si nécessaire
+
+---
+
+### Point d'Attention 3 : Bug validation unique dans UpdateGroupRequest
+
+**Observation** :
+```php
+// La règle 'unique:groups' s'applique aussi au groupe en cours de modification
+// Impossible de modifier un groupe en gardant le même nom
+'name' => 'nullable|string|max:255|unique:groups'
+```
+
+**Recommandation** :
+```php
+public function rules(): array
+{
+    $groupId = $this->route('group')->id;
+
+    return [
+        'name' => 'nullable|string|max:255|unique:groups,name,' . $groupId,
+        'description' => 'nullable|string',
+        'private' => 'nullable|boolean',
+        'banniere' => 'nullable|image|max:8000'
+    ];
+}
+```
 
 ---
 
@@ -652,17 +705,11 @@ Image::make($file)->resize(1200, 400)->save($path);
 'banniere' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:8000|dimensions:min_width=800,min_height=200'
 ```
 
-3. **Slugs avec UUID pour éviter les collisions**
-```php
-'slug' => Str::slug($name) . '-' . Str::random(6)
-```
-
 ### Améliorations Fonctionnelles
 
 1. **Ajouter une limite de groupes par utilisateur** (anti-spam)
-2. **Prévisualisation de la bannière avant upload**
-3. **Compression automatique des images**
-4. **Système de modération pour les groupes publics**
+2. **Compression automatique des images**
+3. **Système de modération pour les groupes publics**
 
 ---
 
@@ -675,13 +722,13 @@ Image::make($file)->resize(1200, 400)->save($path);
 ✅ Upload de fichiers sécurisé
 ✅ Respect des conventions Laravel
 ✅ Protection par authentification
-✅ Autorisation propriétaire pour modification/suppression
+✅ Autorisation propriétaire ou administrateur pour modification/suppression
 
 ### Conformité Métier
 La fonctionnalité "Gestion des Groupes" répond aux exigences fonctionnelles d'une plateforme sociale :
 - Création sécurisée avec validation
-- Modification réservée au propriétaire
-- Suppression contrôlée
+- Modification réservée au propriétaire ou aux administrateurs
+- Suppression contrôlée (propriétaire ou administrateurs)
 - Visibilité configurable (public/privé)
 - Upload de médias (bannière)
 - Protection des données utilisateur
@@ -698,7 +745,7 @@ La fonctionnalité "Gestion des Groupes" répond aux exigences fonctionnelles d'
 -- Table groups
 CREATE TABLE groups (
     id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT NOT NULL,
     private BOOLEAN NOT NULL DEFAULT 0,
@@ -719,7 +766,7 @@ CREATE TABLE groups (
 public function rules(): array
 {
     return [
-        'name' => 'required|string|max:255',
+        'name' => 'required|string|max:255|unique:groups',
         'description' => 'required|string',
         'private' => 'required|boolean',
         'banniere' => 'nullable|image|max:8000'
@@ -734,18 +781,29 @@ public function rules(): array
 public static function booted(): void
 {
     static::creating(function (Group $group) {
-        $slug = Str::slug($group->name);
-        $originalSlug = $slug;
-        $count = 1;
-
-        while (Group::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . "-" . $count++;
-        }
-
-        $group->slug = $slug;
+        $group->slug = Str::slug($group->name);
     });
 }
 ```
+
+**Note** : Le slug est généré uniquement à la création et reste constant même si le nom est modifié ultérieurement. Cela garantit la stabilité des URLs.
+
+### D. Code de validation pour la modification
+
+```php
+// app/Http/Requests/UpdateGroupRequest.php
+public function rules(): array
+{
+    return [
+        'name' => 'nullable|string|max:255|unique:groups',
+        'description' => 'nullable|string',
+        'private' => 'nullable|boolean',
+        'banniere' => 'nullable|image|max:8000'
+    ];
+}
+```
+
+**⚠️ Bug identifié** : La règle `unique:groups` ne devrait PAS s'appliquer au groupe en cours de modification. Cela empêchera de garder le même nom lors de la modification d'autres champs (voir Point d'Attention 3).
 
 ---
 
