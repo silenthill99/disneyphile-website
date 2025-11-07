@@ -12,13 +12,15 @@ type Props = {
 }
 
 const Index = () => {
-    const { groupList, auth } = usePage<Props & SharedData>().props;
+    const { groupList, auth, flash } = usePage<Props & SharedData>().props;
 
     return (
         <PageLayout className={'container mx-auto my-5 rounded-2xl bg-white/80 backdrop-blur-md p-3 overflow-y-auto'}>
             <h1>Liste des groupes</h1>
             <Link href={groups.create()} className={"text-blue-500 hover:text-purple-500 hover:underline"}>Créer un groupe</Link><br/><br/>
-
+            {flash.success && (
+                <p className="text-green-700">{flash.success}</p>
+            )}
             {groupList.data.length > 0 ? (
                 <>
                     <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
@@ -33,7 +35,17 @@ const Index = () => {
                                     <CardContent>
                                         <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
                                         {(auth.user.role?.name === "Admin" || group.owner.id === auth.user.id) && (
-                                            <Link href={groups.destroy(group.slug)} className="text-red-500 hover:underline" method={"delete"}>Supprimer</Link>
+                                            <div className={"flex justify-between"}>
+                                                <Link href={groups.destroy(group.slug)}
+                                                    className="text-red-500 hover:underline"
+                                                    method={'delete'}>Supprimer</Link>
+                                                <Link
+                                                    href={groups.edit(group.slug)}
+                                                    className={"hover:underline"}
+                                                >
+                                                    Modifier
+                                                </Link>
+                                            </div>
                                         )}
                                     </CardContent>
                                 </Card>
