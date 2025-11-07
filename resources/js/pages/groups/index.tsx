@@ -24,7 +24,7 @@ const Index = () => {
                     <div className={'grid grid-cols-2 md:grid-cols-3 gap-5'}>
                         {groupList.data.map(group => (
                             <Link href={groups.show({ slug: group.slug })} key={group.id}>
-                                <Card className={'overflow-hidden'}>
+                                <Card className={'overflow-hidden h-full'}>
                                     <CardHeader>
                                         <img src={group.bannier ? group.bannier : '/assets/images/background.jpg'}
                                              alt={'Bannière'} />
@@ -32,7 +32,7 @@ const Index = () => {
                                     </CardHeader>
                                     <CardContent>
                                         <p className={'line-clamp-3 whitespace-pre-line'}>{group.description}</p>
-                                        {auth.user.role?.name === "Admin" || group.owner.id === auth.user.id && (
+                                        {(auth.user.role?.name === "Admin" || group.owner.id === auth.user.id) && (
                                             <Link href={groups.destroy(group.slug)} className="text-red-500 hover:underline" method={"delete"}>Supprimer</Link>
                                         )}
                                     </CardContent>

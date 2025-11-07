@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/groups', [GroupController::class, "store"])->name("groups.store");
     Route::get("/groups/created", [GroupController::class, "createdGroups"])->name("groups.mine");
     Route::get("/groups/{group}", [GroupController::class, "show"])->name("groups.show");
-    Route::get("/groups/{group}/edit", [GroupController::class, "edit"])->name("groups.edit");
+    Route::get("/groups/{group}/edit", [GroupController::class, "edit"])->can('update', 'group')->name("groups.edit");
     Route::patch("/groups/{group}", [GroupController::class, "update"])->name("groups.update");
     Route::delete("/groups/{group}", [GroupController::class, "destroy"])
         ->can('delete', 'group')

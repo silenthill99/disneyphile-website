@@ -537,14 +537,59 @@ Status: 302 (Redirect vers /groups)
 
 **Objectif** : Vérifier qu'un utilisateur (ni propriétaire ni administrateur) ne peut pas modifier un groupe
 
+**Données en entrée** :
+```php
+[
+    'name' => 'Les Fans de Mickey (Piraté)',
+    'description' => 'Bob essaie de modifier le groupe d\'Alice',
+    'private' => true,
+    'banniere' => null
+]
+```
+
 **Pré-conditions** :
 - Utilisateur authentifié (Bob)
-- Bob n'est PAS propriétaire du groupe
-- Bob n'a PAS le rôle admin
+- Bob n'est PAS propriétaire du groupe "Les Fans de Mickey"
+- Bob n'a PAS le rôle admin (role_id = 1, Guest)
+- Le groupe "Les Fans de Mickey" appartient à Alice
+- Policy ou autorisation sur GroupController@update vérifie que seul le propriétaire ou un admin peut modifier
+
+**Procédure de test** :
+1. Se connecter avec le compte Bob
+2. Tenter d'accéder à la page `/groups/les-fans-de-mickey/edit`
+3. OU tenter d'envoyer une requête PUT/PATCH vers `/groups/les-fans-de-mickey` avec les données d'entrée
+4. Observer la réponse et le code HTTP
 
 **Résultats attendus** :
-- Redirection avec erreur d'autorisation (403 Forbidden)
-- Aucune modification en base
+```php
+// HTTP Status
+Status: 403 (Forbidden)
+// OU
+Status: 302 (Redirect vers /groups avec message d'erreur)
+
+// Message d'erreur
+"Vous n'êtes pas autorisé à modifier ce groupe."
+// OU
+"This action is unauthorized."
+
+// Base de données INCHANGÉE
+[
+    'name' => 'Les Fans de Mickey', // Nom original préservé
+    'slug' => 'les-fans-de-mickey',
+    'description' => 'Un groupe dédié aux amoureux de Mickey Mouse et de ses aventures.', // Description originale
+    'private' => 0, // Visibilité originale
+    'banniere' => null,
+    'owner_id' => {ID d'Alice} // Propriétaire inchangé
+]
+```
+
+**Critères de validation** :
+- ✅ Accès à la page d'édition refusé (403 Forbidden ou redirection)
+- ✅ Requête de modification refusée avec erreur d'autorisation
+- ✅ Message d'erreur explicite affiché
+- ✅ Aucune modification appliquée en base de données
+- ✅ Toutes les valeurs du groupe restent identiques
+- ✅ Policy ou middleware d'autorisation fonctionne correctement
 
 ---
 
@@ -552,14 +597,54 @@ Status: 302 (Redirect vers /groups)
 
 **Objectif** : Vérifier qu'un propriétaire ou un administrateur peut supprimer un groupe
 
+**Données en entrée** :
+```php
+// Groupe à supprimer
+Slug: 'les-fans-de-mickey'
+ID: {ID du groupe}
+Owner: Alice
+```
+
 **Pré-conditions** :
 - Utilisateur authentifié (Alice ou un admin)
 - Alice est propriétaire du groupe OU l'utilisateur a le rôle admin
+- Le groupe "Les Fans de Mickey" existe en base de données
+- Policy ou autorisation sur GroupController@destroy vérifie que seul le propriétaire ou un admin peut supprimer
+
+**Procédure de test** :
+1. Se connecter avec le compte Alice (propriétaire)
+2. Accéder à la page `/groups` ou `/groups/les-fans-de-mickey`
+3. Cliquer sur le bouton "Supprimer le groupe"
+4. Confirmer la suppression dans la modale de confirmation (si présente)
+5. OU envoyer une requête DELETE vers `/groups/les-fans-de-mickey`
+6. Observer la redirection et le message
 
 **Résultats attendus** :
-- Groupe supprimé de la base
-- Redirection vers `/groups`
-- Message de succès
+```php
+// HTTP Status
+Status: 302 (Redirect vers /groups)
+
+// Message de succès
+Session: "Groupe supprimé avec succès"
+// OU
+"Le groupe a été supprimé."
+
+// Base de données
+SELECT * FROM groups WHERE slug = 'les-fans-de-mickey';
+// Résultat: 0 ligne (groupe supprimé)
+
+// Suppression en cascade (si applicable)
+// Les posts, membres, et autres données liées sont également supprimés
+// ou leurs foreign keys sont mises à NULL selon la configuration
+```
+
+**Critères de validation** :
+- ✅ Redirection vers `/groups`
+- ✅ Message de succès affiché
+- ✅ Groupe supprimé de la table `groups`
+- ✅ Fichier bannière supprimé du stockage (si présent)
+- ✅ Données liées gérées correctement (cascade ou nullification)
+- ✅ Le groupe n'apparaît plus dans la liste des groupes
 
 ---
 
@@ -567,14 +652,62 @@ Status: 302 (Redirect vers /groups)
 
 **Objectif** : Vérifier qu'un utilisateur (ni propriétaire ni administrateur) ne peut pas supprimer un groupe
 
+**Données en entrée** :
+```php
+// Groupe ciblé pour suppression
+Slug: 'pixar-lovers'
+ID: {ID du groupe}
+Owner: Bob (pas Alice)
+```
+
 **Pré-conditions** :
-- Utilisateur authentifié (Bob)
-- Bob n'est PAS propriétaire du groupe
-- Bob n'a PAS le rôle admin
+- Utilisateur authentifié (Alice)
+- Alice n'est PAS propriétaire du groupe "Pixar Lovers" (appartient à Bob)
+- Alice n'a PAS le rôle admin (role_id = 1, Guest)
+- Le groupe "Pixar Lovers" existe en base de données
+- Policy ou autorisation sur GroupController@destroy vérifie les permissions
+
+**Procédure de test** :
+1. Se connecter avec le compte Alice
+2. Tenter d'accéder directement à la page du groupe "Pixar Lovers"
+3. Envoyer une requête DELETE vers `/groups/pixar-lovers` (via outil API ou en manipulant le formulaire)
+4. Observer la réponse HTTP et le message d'erreur
 
 **Résultats attendus** :
-- Redirection avec erreur d'autorisation (403 Forbidden)
-- Groupe non supprimé
+```php
+// HTTP Status
+Status: 403 (Forbidden)
+// OU
+Status: 302 (Redirect vers /groups avec message d'erreur)
+
+// Message d'erreur
+"Vous n'êtes pas autorisé à supprimer ce groupe."
+// OU
+"This action is unauthorized."
+
+// Base de données INCHANGÉE
+SELECT * FROM groups WHERE slug = 'pixar-lovers';
+// Résultat: 1 ligne (groupe toujours présent)
+
+[
+    'id' => {ID du groupe},
+    'name' => 'Pixar Lovers',
+    'slug' => 'pixar-lovers',
+    'description' => 'Pour les fans des films Pixar',
+    'private' => 1,
+    'banniere' => '/storage/images/{timestamp}_banniere.jpg',
+    'owner_id' => {ID de Bob} // Toujours Bob
+]
+```
+
+**Critères de validation** :
+- ✅ Requête de suppression refusée (403 Forbidden ou redirection)
+- ✅ Message d'erreur d'autorisation affiché
+- ✅ Groupe toujours présent en base de données
+- ✅ Toutes les données du groupe restent identiques
+- ✅ Fichier bannière toujours présent sur le disque
+- ✅ Policy ou middleware d'autorisation fonctionne correctement
+- ✅ Le groupe apparaît toujours dans la liste des groupes
 
 ---
 
