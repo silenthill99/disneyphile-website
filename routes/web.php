@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete("/groups/{group}", [GroupController::class, "destroy"])
         ->can('delete', 'group')
         ->name("groups.destroy");
+    Route::get("/{user}/groups", [GroupController::class, "userGroups"])->name("groups.userGroups");
 
     Route::resource('todo', TodoController::class);
 });

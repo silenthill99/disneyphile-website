@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class GroupFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name),
             'private' => $this->faker->boolean,
-            "owner_id" => 1,
+            "owner_id" => User::factory(),
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

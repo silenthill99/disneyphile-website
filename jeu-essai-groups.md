@@ -1,4 +1,4 @@
-# Jeu d'Essai - Gestion des Groupes (Groups)
+# Jeu d'Essai - Gestion des Groupes (UserGroups)
 
 ## 1. Identification de la fonctionnalité
 

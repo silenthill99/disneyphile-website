@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -88,6 +89,12 @@ class GroupController extends Controller
     public function edit(Group $group)
     {
         return Inertia::render('groups/edit', compact('group'));
+    }
+
+    public function userGroups(User $user)
+    {
+        $createdGroups = $user->createdGroups()->paginate(3);
+        return Inertia::render('groups/user-groups', compact(['user', 'createdGroups']));
     }
 
     /**

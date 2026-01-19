@@ -4,19 +4,14 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { SharedData, User } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Posts } from '@/types/posts';
-import { Tag } from '@/types/tags';
 import { dashboard } from '@/routes';
 import storage from '@/routes/storage';
 
 
-
 const Show = () => {
-    const {user, can, tags, posts} = usePage<SharedData & {
+    const {user, can} = usePage<SharedData & {
         user: User,
-        can: { view: boolean },
-        tags: Tag[],
-        posts: Posts[]
+        can: { view: boolean }
     }>().props;
 
     return (
@@ -36,11 +31,11 @@ const Show = () => {
                 </div>
                 <div className={"w-full mt-4"}>
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Tags</h3>
-                    {tags.length === 0 ? (
+                    {user.tags.length === 0 ? (
                         <p className={"text-sm text-gray-400"}>Aucun tags actuellement</p>
                     ) : (
                         <div className={'flex flex-wrap gap-2'}>
-                            {tags.map((tag) => (
+                            {user.tags.map((tag) => (
                                 <Badge key={tag.id}>{tag.name}</Badge>
                             ))}
                         </div>
@@ -48,10 +43,10 @@ const Show = () => {
                 </div>
             </div>
             <div className={'bg-white/90 rounded-md md:col-span-3 backdrop-blur-md md:overflow-y-auto p-5'}>
-                {posts.map((post) => (
+                {user.posts.map((post) => (
                     <Card key={post.id}>
                         <CardHeader className={"flex-row items-center justify-between"}>
-                            <CardTitle>{post.user.name}</CardTitle>
+                            <CardTitle>{user.name}</CardTitle>
                             <p>Le {new Date(post.created_at).toLocaleDateString("fr-FR", {
                                 day: "numeric",
                                 month: "long",
@@ -62,7 +57,7 @@ const Show = () => {
                             <p>{post.content}</p>
                         </CardContent>
                         <CardFooter>
-                            {post.image.map(image => (
+                            {post.post_image.map(image => (
                                 <img key={image.id} src={'/storage/' + image.image_path} alt={""} />
                             ))}
                         </CardFooter>

@@ -1,6 +1,6 @@
 import { User } from '@/types/index';
 
-export type Groups ={
+export type Groups = {
     id: number,
     owner: User,
     name: string,

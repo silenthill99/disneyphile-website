@@ -5,7 +5,7 @@ import { Groups } from '@/types/groups';
 export type Posts = {
     id: number;
     content: string;
-    image: ImagePath[]
+    post_image: ImagePath[]
     created_at: string;
     user: User;
     likes: number;

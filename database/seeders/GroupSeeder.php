@@ -13,5 +13,6 @@ class GroupSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('groups')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Group::factory(200)->create();
     }
 }
