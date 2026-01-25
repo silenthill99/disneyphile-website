@@ -52,10 +52,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('todo', TodoController::class);
 });
 
-Route::middleware(GuestToLanding::class)->group(function () {
+Route::middleware([GuestToLanding::class, "verified"])->group(function () {
 
     Route::get('/', function () {
-        $posts = Post::with("user", "group")->get();
+        $posts = Post::with(["user", "group"])->get();
         $pageList = Page::all();
         return Inertia::render('welcome', compact('posts', 'pageList'));
     })->name('home');

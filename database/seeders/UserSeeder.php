@@ -31,7 +31,6 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('Mylene.10'),
             'remember_token' => null,
-            'birth_date' => Carbon::create(1999, 07, 11),
             'created_at' => now(),
             'updated_at' => now()
         ]);
