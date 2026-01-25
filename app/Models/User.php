@@ -29,7 +29,6 @@ class User extends Authenticatable
         'slug',
         'email',
         'password',
-        'birth_date'
     ];
 
     /**
