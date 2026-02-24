@@ -14,7 +14,7 @@ import Mailbox from '@/components/mailbox';
 import { dashboard, home, login, logout } from '@/routes';
 import members from '@/routes/members';
 import groups from '@/routes/groups';
-import { Home, LayoutDashboard, LogOut, Search, User, Users } from 'lucide-react';
+import { Home, LayoutDashboard, LoaderCircle, LogOut, Menu, Search, User, Users } from 'lucide-react';
 import React from 'react';
 
 const NavLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => (
@@ -104,39 +104,72 @@ const Header = () => {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <Link href={logout()} method="post" className="flex cursor-pointer items-center gap-2 text-red-500 focus:text-red-500">
+                                <DropdownMenuItem asChild variant={"destructive"}>
+                                    <Link href={logout()} method="post" className="flex cursor-pointer items-center gap-2">
                                         <LogOut className="h-4 w-4" />
                                         Se déconnecter
                                     </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <div className={'md:hidden'}>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger className={'rounded bg-white p-1'}>Menu</DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuItem asChild>
-                                        <Link href={groups.index()}>Liste des groupes</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={dashboard()}>Tableau de bord</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild className={'hover:underline'}>
-                                        <Link href={members.show({ slug: auth.user.slug })}>Mon profil</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link
-                                            href={logout()}
-                                            method={'post'}
-                                            className={'cursor-pointer text-red-500 hover:text-red-500 hover:underline'}
-                                        >
-                                            Se déconnecter
-                                        </Link>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+                        {/* Menu mobile */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/20 hover:text-white lg:hidden"
+                                >
+                                    <Menu className="h-5 w-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="md:hidden w-64 border-disney-blue/20 bg-white/95 backdrop-blur-md">
+                                {/* Recherche mobile */}
+                                <div className="p-3 md:hidden">
+                                    <Form action={members.index().url} method="get" className="relative">
+                                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-disney-blue-dark/60" />
+                                        <Input
+                                            type="search"
+                                            name="search"
+                                            placeholder="Rechercher..."
+                                            className="h-9 rounded-full border-disney-blue/20 bg-disney-blue-light/10 pl-10"
+                                        />
+                                    </Form>
+                                </div>
+                                <DropdownMenuSeparator className="md:hidden" />
+                                <DropdownMenuItem asChild>
+                                    <Link href={home()} className="flex cursor-pointer items-center gap-3 py-2">
+                                        <Home className="h-4 w-4 text-disney-blue" />
+                                        Accueil
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={dashboard()} className="flex cursor-pointer items-center gap-3 py-2">
+                                        <LayoutDashboard className="h-4 w-4 text-disney-blue" />
+                                        Tableau de bord
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={members.show({ slug: auth.user.slug })} className="flex cursor-pointer items-center gap-3 py-2">
+                                        <User className="h-4 w-4 text-disney-blue" />
+                                        Mon profil
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={groups.index()} className="flex cursor-pointer items-center gap-3 py-2">
+                                        <Users className="h-4 w-4 text-disney-blue" />
+                                        Liste des groupes
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                    <Link href={logout()} method="post" className="flex cursor-pointer items-center gap-3 py-2">
+                                        <LogOut className="h-4 w-4" />
+                                        Se déconnecter
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Mailbox className={'hidden w-5 text-white md:block'} />
                     </div>
                 ) : (
@@ -145,11 +178,46 @@ const Header = () => {
                         onError={() => {
                             window.location.href = login().url;
                         }}
-                        className={'space-x-2'}
+                        className="flex items-center gap-2"
                     >
-                        <input type={'email'} name={'email'} className={'bg-white'} placeholder={'Votre adresse mail'} />
-                        <input type={'password'} name={'password'} placeholder={'Votre mot de passe'} className={'bg-white'} />
-                        <input type={'submit'} value={'Se connecter'} />
+                        {({ processing }) => (
+                            <>
+                                <div className="hidden items-center gap-2 sm:flex">
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        className="h-9 w-40 rounded-full border-white/20 bg-white/95 text-sm shadow-inner transition-all duration-200 placeholder:text-disney-blue-dark/50 focus:border-disney-gold focus:bg-white md:w-48"
+                                        placeholder="Email"
+                                    />
+                                    <Input
+                                        type="password"
+                                        name="password"
+                                        placeholder="Mot de passe"
+                                        className="h-9 w-32 rounded-full border-white/20 bg-white/95 text-sm shadow-inner transition-all duration-200 placeholder:text-disney-blue-dark/50 focus:border-disney-gold focus:bg-white md:w-40"
+                                    />
+                                </div>
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="h-9 rounded-full bg-disney-gold px-4 font-semibold text-disney-blue-dark shadow-md transition-all duration-200 hover:bg-disney-gold-dark hover:shadow-lg disabled:opacity-70"
+                                >
+                                    {processing ? (
+                                        <>
+                                            <LoaderCircle className="h-4 w-4 animate-spin" />
+                                            Connexion...
+                                        </>
+                                    ) : (
+                                        'Se connecter'
+                                    )}
+                                </Button>
+                                <Link
+                                    href={login().url}
+                                    className="text-sm text-white/80 underline-offset-2 transition-colors hover:text-disney-gold hover:underline sm:hidden"
+                                >
+                                    Connexion
+                                </Link>
+                            </>
+                        )}
                     </Form>
                 )}
             </div>

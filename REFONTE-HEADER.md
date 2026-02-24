@@ -10,10 +10,10 @@
 | Header - Barre de recherche stylisée | ✅ Fait |
 | Header - Navigation Desktop avec icônes | ✅ Fait |
 | Header - Menu utilisateur Desktop | ✅ Fait |
-| Header - Menu mobile | ⏳ À faire |
-| Header - Formulaire de connexion (visiteurs) | ⏳ À faire |
-| Backend - Recherche de membres | ⏳ À faire |
-| Page-Layout - Overlay (optionnel) | ⏳ À faire |
+| Header - Menu mobile | ✅ Fait |
+| Header - Formulaire de connexion (visiteurs) | ✅ Fait |
+| Backend - Recherche de membres | ✅ Fait |
+| Page-Layout - Overlay | ❌ Retiré (contenu déjà dans des cartes) |
 
 ---
 
@@ -191,7 +191,7 @@ const NavLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; l
     </DropdownMenuContent>
 </DropdownMenu>
 ```
-**Status:** ⏳ À faire
+**Status:** ✅ Fait
 
 #### Formulaire de connexion (visiteurs) :
 ```tsx
@@ -242,7 +242,7 @@ const NavLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; l
     )}
 </Form>
 ```
-**Status:** ⏳ À faire
+**Status:** ✅ Fait
 
 ---
 
@@ -266,29 +266,13 @@ public function index(Request $request)
 
 N'oublie pas d'ajouter `use Illuminate\Http\Request;` en haut du fichier.
 
-**Status:** ⏳ À faire
+**Status:** ✅ Fait
 
 ---
 
-### 4. Page-Layout (page-layout.tsx) - Optionnel
+### 4. Page-Layout (page-layout.tsx) - Overlay
 
-Améliorer avec un overlay sur l'image de fond pour une meilleure lisibilité :
-
-```tsx
-<div className={cn(
-    "min-h-screen flex flex-col bg-[url('/assets/images/background.jpg')] bg-cover bg-fixed",
-    parentClassName
-)}>
-    {/* Overlay */}
-    <div className="absolute inset-0 bg-gradient-to-b from-disney-blue-dark/30 via-transparent to-disney-blue-dark/50 pointer-events-none" />
-
-    <Header />
-    <main className={cn(`flex-1 min-h-0 relative`, className)}>
-        {children}
-    </main>
-</div>
-```
-**Status:** ⏳ À faire (optionnel)
+**Status:** ❌ Retiré — le contenu est déjà affiché dans des cartes avec leur propre fond, l'overlay assombrissait l'image de fond inutilement.
 
 ---
 
@@ -303,7 +287,7 @@ Améliorer avec un overlay sur l'image de fond pour une meilleure lisibilité :
 
 ## Fichiers à modifier
 
-1. ✅ `resources/css/app.css` - Couleurs (fait)
-2. ⏳ `resources/js/components/header.tsx` - Refonte visuelle (en cours - menu mobile et formulaire connexion restants)
-3. ⏳ `app/Http/Controllers/UserController.php` - Recherche fonctionnelle (à faire)
-4. ⏳ `resources/js/layouts/page-layout.tsx` - Overlay (optionnel, à faire)
+1. ✅ `resources/css/app.css` - Couleurs
+2. ✅ `resources/js/components/header.tsx` - Refonte visuelle complète
+3. ✅ `app/Http/Controllers/UserController.php` - Recherche fonctionnelle
+4. ❌ `resources/js/layouts/page-layout.tsx` - Overlay retiré (inutile avec les cartes)
