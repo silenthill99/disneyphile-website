@@ -104,7 +104,7 @@ const Header = () => {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild variant={"destructive"}>
+                                <DropdownMenuItem asChild>
                                     <Link href={logout()} method="post" className="flex cursor-pointer items-center gap-2">
                                         <LogOut className="h-4 w-4" />
                                         Se déconnecter
