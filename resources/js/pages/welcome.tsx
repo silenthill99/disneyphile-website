@@ -47,9 +47,7 @@ export default function Welcome() {
     const getInitials = useInitials();
     return (
         <PageLayout parentClassName={"h-screen"} className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
-            <Head title="Welcome">
-                <meta name="description" content="Disneyphile - Retrouvez les dernières publications, groupes et pages de la communauté Disney." />
-            </Head>
+            <Head title="Welcome" />
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
