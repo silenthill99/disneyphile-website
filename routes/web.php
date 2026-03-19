@@ -75,7 +75,7 @@ Route::middleware([GuestToLanding::class, 'verified'])->group(function () {
 
 Route::get('/landing', function () {
     return Inertia::render('landing');
-})->middleware('guest')->name('landing');
+})->middleware(['guest', 'cache.headers:public;max_age=600;etag'])->name('landing');
 
 Route::get('/members/{user}', [UserController::class, 'show'])
     ->name('members.show');
