@@ -15,13 +15,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 const Landing = () => {
 
     return (
-        <div className={"min-h-screen bg-[url('/disneyland-486098.jpg')] bg-cover bg-fixed bg-center"}>
+        <div className={"min-h-screen bg-[url('/disneyland.webp')] bg-cover bg-fixed bg-center"}>
             {/*<Header />*/}
             <main className={'min-h-screen gap-10 bg-black/50 p-5 2xl:p-0'}>
                 <div className={'container mx-auto grid md:grid-cols-2 min-h-screen items-center'}>
                     <div className={'flex flex-col justify-center text-white'}>
                         <h1 className={'mb-2 text-5xl font-bold drop-shadow-lg'}>Disneyphile</h1>
-                        <p className={'text-lg text-white/80'}>Là où la magie prends vie</p>
+                        <p className={'text-lg text-white/90'}>Là où la magie prends vie</p>
                     </div>
                     <Tabs defaultValue={'register'}>
                         <TabsList>
@@ -83,7 +83,8 @@ const Landing = () => {
                                                     <p className={"text-red-500"}>{errors.password_confirmation}</p>
                                                 )}
                                                 <br />
-                                                <Input type={"date"} name={"birth_date"} />
+                                                <Label htmlFor={"birth_date"}>Date de naissance</Label>
+                                                <Input type={"date"} name={"birth_date"} id={"birth_date"} />
                                                 {errors.birth_date && (
                                                     <p className="text-red-500">{errors.birth_date}</p>
                                                 )}

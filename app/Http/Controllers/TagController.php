@@ -16,13 +16,14 @@ class TagController extends Controller
         $tags = Auth::user()->tags;
         $users = User::with('tags')->paginate(25);
         $tags_all = Tag::all();
-        return Inertia::render("tags", compact(["tags", "users", "tags_all"]));
+
+        return Inertia::render('tags', compact(['tags', 'users', 'tags_all']));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            "name" => "required",
+            'name' => 'required',
         ]);
 
         Tag::create($data);
@@ -38,7 +39,7 @@ class TagController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $data = $request->validate([
-
+            'name' => 'required|string|max:255',
         ]);
 
         $tag->update($data);
@@ -53,13 +54,17 @@ class TagController extends Controller
         return response()->json();
     }
 
-    public function attach(User $user, Tag $tag) {
+    public function attach(User $user, Tag $tag)
+    {
         $user->tags()->attach($tag);
+
         return \redirect()->back();
     }
 
-    public function removeTagUser(User $user, Tag $tag) {
+    public function removeTagUser(User $user, Tag $tag)
+    {
         $user->tags()->detach($tag);
+
         return \redirect()->back();
     }
 }

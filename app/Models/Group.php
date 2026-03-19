@@ -12,13 +12,14 @@ use Illuminate\Support\Str;
 class Group extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'owner_id',
         'slug',
         'name',
         'private',
         'description',
-        'bannier'
+        'bannier',
     ];
 
     public function owner(): BelongsTo
@@ -28,7 +29,7 @@ class Group extends Model
 
     public function groupMembers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, "group_members");
+        return $this->belongsToMany(User::class, 'group_members');
     }
 
     public function posts(): HasMany
@@ -44,7 +45,16 @@ class Group extends Model
     public static function booted(): void
     {
         static::creating(function (Group $group) {
-            $group->slug = Str::slug($group->name);
+            $slug = Str::slug($group->name);
+            $originalSlug = $slug;
+            $counter = 1;
+
+            while (Group::where('slug', $slug)->exists()) {
+                $slug = $originalSlug.'-'.$counter;
+                $counter++;
+            }
+
+            $group->slug = $slug;
         });
     }
 }

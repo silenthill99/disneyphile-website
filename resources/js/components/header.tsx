@@ -79,7 +79,7 @@ const Header = () => {
                                     <span className="max-w-24 truncate text-sm">{auth.user.name}</span>
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 border-disney-blue/20 bg-white/95 backdrop-blur-md">
+                            <DropdownMenuContent align="end" className="w-56 border-disney-blue/20 bg-white/95 backdrop-blur-md hidden lg:block">
                                 <div className="px-3 py-2">
                                     <p className="text-sm font-medium text-disney-blue-dark">{auth.user.name}</p>
                                     <p className="text-xs text-muted-foreground">{auth.user.email}</p>
@@ -123,7 +123,7 @@ const Header = () => {
                                     <Menu className="h-5 w-5" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="md:hidden w-64 border-disney-blue/20 bg-white/95 backdrop-blur-md">
+                            <DropdownMenuContent align="end" className="lg:hidden w-64 border-disney-blue/20 bg-white/95 backdrop-blur-md">
                                 {/* Recherche mobile */}
                                 <div className="p-3 md:hidden">
                                     <Form action={members.index().url} method="get" className="relative">

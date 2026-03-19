@@ -1,46 +1,49 @@
-<?php /** @noinspection PhpUndefinedFunctionInspection */
+<?php
 
-    namespace App\Http\Controllers;
+/** @noinspection PhpUndefinedFunctionInspection */
 
-	use App\Models\PostImage;
-	use Illuminate\Http\Request;
+namespace App\Http\Controllers;
 
-	class PostImageController extends Controller
-	{
-		public function index()
-		{
-			return PostImage::all();
-		}
+use App\Models\PostImage;
+use Illuminate\Http\Request;
 
-		public function store(Request $request)
-		{
-			$data = $request->validate([
+class PostImageController extends Controller
+{
+    public function index()
+    {
+        return PostImage::all();
+    }
 
-			]);
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'post_id' => 'required|exists:posts,id',
+            'image_path' => 'required|string|max:255',
+        ]);
 
-			return PostImage::create($data);
-		}
+        return PostImage::create($data);
+    }
 
-		public function show(PostImage $postImage)
-		{
-			return $postImage;
-		}
+    public function show(PostImage $postImage)
+    {
+        return $postImage;
+    }
 
-		public function update(Request $request, PostImage $postImage)
-		{
-			$data = $request->validate([
+    public function update(Request $request, PostImage $postImage)
+    {
+        $data = $request->validate([
+            'image_path' => 'required|string|max:255',
+        ]);
 
-			]);
+        $postImage->update($data);
 
-			$postImage->update($data);
+        return $postImage;
+    }
 
-			return $postImage;
-		}
+    public function destroy(PostImage $postImage)
+    {
+        $postImage->delete();
 
-		public function destroy(PostImage $postImage)
-		{
-			$postImage->delete();
-
-			return response()->json();
-		}
-	}
+        return response()->json();
+    }
+}

@@ -7,10 +7,8 @@ use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -36,27 +34,28 @@ class RegisteredUserController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'birth_date' => 'required|date'
+            'birth_date' => 'required|date',
         ]);
 
         $birthDate = $data['birth_date'];
 
         if (Carbon::parse($birthDate)->gte(Carbon::now()->subYears(15))) {
             throw ValidationException::withMessages(
-                ['birth_date' => "Il faut avoir au minimum 15 ans pour accéder à nos services !"]
+                ['birth_date' => 'Il faut avoir au minimum 15 ans pour accéder à nos services !']
             );
         }
 
-        $role = Role::firstOrCreate(['name' => "Guest"]);
+        $role = Role::firstOrCreate(['name' => 'Guest']);
 
-        $user = User::create([
+        $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $role->id
         ]);
+        $user->role_id = $role->id;
+        $user->save();
 
         event(new Registered($user));
 

@@ -1,9 +1,11 @@
-<?php /** @noinspection PhpUndefinedFunctionInspection */
+<?php
 
-    namespace App\Models;
+/** @noinspection PhpUndefinedFunctionInspection */
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+namespace App\Models;
+
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,7 +25,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
-        'role_id',
         'name',
         'image_profile',
         'slug',
@@ -68,11 +69,12 @@ class User extends Authenticatable implements MustVerifyEmail
             $counter = 1;
 
             while (User::where('slug', $user->slug)->exists()) {
-                $user->slug = $originalSlug . '-' . $counter;
+                $user->slug = $originalSlug.'-'.$counter;
+                $counter++;
             }
-//            if (is_null($user->role_id)) {
-//                $user->role_id = Role::where('name', 'Guest')->firstOrFail()->id;
-//            }
+            //            if (is_null($user->role_id)) {
+            //                $user->role_id = Role::where('name', 'Guest')->firstOrFail()->id;
+            //            }
         });
     }
 
@@ -88,7 +90,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function createdGroups(): HasMany
     {
-        return $this->hasMany(Group::class, "owner_id");
+        return $this->hasMany(Group::class, 'owner_id');
     }
 
     public function groups(): BelongsToMany
@@ -96,13 +98,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Group::class, 'group_members');
     }
 
-    public function posts(): HasMany {
+    public function posts(): HasMany
+    {
         return $this->hasMany(Post::class);
     }
 
     public function pages(): HasMany
     {
-        return $this->hasMany(Page::class, "owner_id");
+        return $this->hasMany(Page::class, 'owner_id');
     }
 
     public function joinedPages(): BelongsToMany

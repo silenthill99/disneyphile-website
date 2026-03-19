@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Post extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'group_id',
         'content',
         'visibility',
-        'likes'
     ];
 
     public function user(): BelongsTo

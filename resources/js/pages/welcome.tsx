@@ -47,10 +47,7 @@ export default function Welcome() {
     const getInitials = useInitials();
     return (
         <PageLayout parentClassName={"h-screen"} className="container mx-auto grid h-full gap-5 p-5 md:px-0 lg:grid-cols-5">
-            <Head title="Welcome">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-            </Head>
+            <Head title="Welcome" />
             {/* Panneau gauche (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden items-center gap-5 rounded-2xl bg-white p-5 text-center md:flex-col lg:flex">
                 <Avatar>
@@ -113,7 +110,7 @@ export default function Welcome() {
                                             </>
                                         )}
                                     </div>
-                                    <p className={"text-gray-400 text-xs"}>Le {new Date().toLocaleDateString(navigator.language, {
+                                    <p className={"text-gray-600 text-xs"}>Le {new Date().toLocaleDateString(navigator.language, {
                                         year: 'numeric',
                                         month: 'long',
                                         day: 'numeric'
@@ -128,7 +125,7 @@ export default function Welcome() {
 
             {/* Panneau droit (immobile, dans le flux) */}
             <div className="hidden h-full overflow-hidden rounded-2xl bg-white p-5 lg:flex lg:flex-col">
-                <h2 className={'py-5 text-center text-3xl flex-shrink-0'}>Suggestions</h2>
+                <h2 className={'py-5 text-center text-3xl shrink-0'}>Suggestions</h2>
                 <div className="flex-1 overflow-y-auto space-y-2">
                     {pageList.map(page => (
                         <Link className={"block hover:underline"} key={page.id} href={pages.show({slug: page.slug})}>{page.title}</Link>

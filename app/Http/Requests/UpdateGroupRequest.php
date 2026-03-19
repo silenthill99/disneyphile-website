@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 
 class UpdateGroupRequest extends FormRequest
 {
@@ -14,7 +13,7 @@ class UpdateGroupRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('update', $this->route('group')) || Gate::allows('isAdmin');
+        return Gate::allows('update', $this->route('group')) || Gate::allows('admin', $this->user());
     }
 
     /**
@@ -27,8 +26,8 @@ class UpdateGroupRequest extends FormRequest
         return [
             'name' => 'nullable|string|max:255|unique:groups',
             'private' => 'nullable|boolean',
-            'banniere' => "nullable|image|max:8000",
-            'description' => "nullable|string"
+            'banniere' => 'nullable|image|max:8000',
+            'description' => 'nullable|string',
         ];
     }
 }

@@ -12,9 +12,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::query()
+            ->select(['id', 'name', 'slug', 'image_profile', 'created_at'])
             ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('email', 'like', '%'.$search.'%');
+                $query->where('name', 'like', '%'.$search.'%');
             })->get();
 
         return Inertia::render('members/index', compact('users'));

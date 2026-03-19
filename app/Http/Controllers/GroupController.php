@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class GroupController extends Controller
@@ -26,7 +27,7 @@ class GroupController extends Controller
 
         if ($request->hasFile('banniere')) {
             $imageFile = $request->file('banniere');
-            $imageName = time().'_'.$imageFile->getClientOriginalName();
+            $imageName = Str::uuid().'.'.$imageFile->getClientOriginalExtension();
             $data['bannier'] = '/storage/'.$imageFile->storeAs('images', $imageName, 'public');
         }
 
@@ -53,7 +54,7 @@ class GroupController extends Controller
             }
 
             $imageFile = $request->file('banniere');
-            $imageName = time().'_'.$imageFile->getClientOriginalName();
+            $imageName = Str::uuid().'.'.$imageFile->getClientOriginalExtension();
             $data['bannier'] = '/storage/'.$imageFile->storeAs('images', $imageName, 'public');
         }
 
@@ -94,6 +95,7 @@ class GroupController extends Controller
     public function userGroups(User $user)
     {
         $createdGroups = $user->createdGroups()->paginate(3);
+
         return Inertia::render('groups/user-groups', compact(['user', 'createdGroups']));
     }
 

@@ -8,11 +8,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use function Symfony\Component\String\s;
 
 class ProfileController extends Controller
 {
@@ -38,12 +36,12 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
-//        if ($request->hasFile('image')) {
-//            $image = $request->file('image');
-//            $filename = time() . '_' . $image->getClientOriginalName();
-//            $path = $image->storeAs('images', $filename, 'public');
-//            $data['image_profile'] = $path;
-//        }
+        //        if ($request->hasFile('image')) {
+        //            $image = $request->file('image');
+        //            $filename = time() . '_' . $image->getClientOriginalName();
+        //            $path = $image->storeAs('images', $filename, 'public');
+        //            $data['image_profile'] = $path;
+        //        }
 
         $request->user()->save();
 
@@ -52,8 +50,17 @@ class ProfileController extends Controller
 
     public function update_image(Request $request): RedirectResponse
     {
-        \Log::debug('Méthode update_image appelée');
-        dd($request->allFiles());
+        $request->validate([
+            'image' => 'required|image|max:8000',
+        ]);
+
+        $image = $request->file('image');
+        $imageName = Str::uuid().'.'.$image->getClientOriginalExtension();
+        $path = $image->storeAs('images', $imageName, 'public');
+
+        $request->user()->update(['image_profile' => $path]);
+
+        return to_route('profile.edit');
     }
 
     /**
