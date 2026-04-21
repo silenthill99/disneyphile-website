@@ -3,16 +3,18 @@
         "claude_code"
     ],
     "guidelines": true,
-    "herd_mcp": false,
     "mcp": true,
+    "nightwatch_mcp": false,
     "packages": [
-        "inertiajs/inertia-laravel"
+        "fruitcake/laravel-debugbar"
     ],
     "sail": false,
     "skills": [
+        "laravel-best-practices",
         "wayfinder-development",
         "pest-testing",
         "inertia-react-development",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "debug-using-debugbar"
     ]
 }
