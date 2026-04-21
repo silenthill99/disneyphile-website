@@ -19,5 +19,12 @@ export default defineConfig({
         alias: {
             "@": "/resources/js"
         }
-    }
+    };
+    server: {
+        watch: {
+            ignored: [
+                "**/.junie/**",
+            ],
+        },
+    },
 });

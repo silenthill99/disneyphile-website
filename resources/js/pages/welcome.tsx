@@ -6,11 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import Create from '@/components/articles/create';
 import { useInitials } from '@/hooks/use-initials';
 import RightArrow from '@/components/right-arrow';
+import LikeButton from '@/components/like-button';
 import { Posts } from '@/types/posts';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import axios from 'axios';
-import { like } from '@/routes';
 import groups from '@/routes/groups';
 import members from '@/routes/members';
 import pages from '@/routes/pages';
@@ -18,31 +15,6 @@ import storage from '@/routes/storage';
 
 export default function Welcome() {
     const {auth, posts, pageList} = usePage<SharedData & {posts: Posts[], pageList: Page[]}>().props;
-
-    const [postData, setPostData] = useState(posts)
-
-    const handleLike = async (postId: number) => {
-        setPostData(prevPost =>
-            prevPost.map(post =>
-                post.id === postId
-                    ? {...post, likes: post.likes + 1}
-                    : post
-            )
-        );
-        try {
-            await axios.post(like({id: postId}).url)
-        } catch (e) {
-            setPostData(posts)
-            console.error("Erreur : " +e)
-        }
-    }
-
-    // const text = "Attention à tiktok : https://www.youtube.com/watch?v=jrJ5CNeoTXU"
-    // const rejex = /https?:\/\/\S+/g;
-    // const linkedText = text.replace(rejex, (url) => {
-    //     return `<a href="${url}" class="text-blue-500">${url}</a>`
-    // })
-    // DOMPurify.sanitize(linkedText);
 
     const getInitials = useInitials();
     return (
@@ -90,7 +62,7 @@ export default function Welcome() {
                     </DialogContent>
                 </Dialog>
                 <div className={'my-20 space-y-5'}>
-                    {postData.map((p) => (
+                    {posts.map((p) => (
                         <div key={p.id}>
                             <div className={'rounded bg-white p-5 space-y-5'}>
                                 <div className={"flex items-center justify-between"}>
@@ -116,7 +88,7 @@ export default function Welcome() {
                                         day: 'numeric'
                                     })}</p></div>
                                 <p>{p.content}</p>
-                                <Button variant={"ghost"} onClick={() => handleLike(p.id)}>J'aime {p.likes}</Button>
+                                <LikeButton postId={p.id} initialLikes={p.likes} />
                             </div>
                         </div>
                     ))}
